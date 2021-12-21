@@ -1,11 +1,4 @@
-const nearley = require("nearley");
-const grammar = require("../grammarDef/grammar.js");
 const fs = require('fs')
-
-// Create a Parser object from our grammar.
-const parser = new nearley.Parser(
-    nearley.Grammar.fromCompiled(grammar)
-);
 
 //using brfs to read static assets
 const grammarDef = fs.readFileSync(__dirname + '/../grammarDef/grammar.ne', 'utf8')
@@ -26,36 +19,65 @@ Array.from(ruleMap.values())[0].forEach(elem => {
     option.text = option.value = elem;
     select.add(option, 0);
 });
+select.selectedIndex = -1;
 
 document.getElementsByName('grammarSelector').forEach(s => {
-    s.onchange = function (event) {
-        console.log(this.value)
-
-        select = document.createElement('select');
-        //if rule if a simple non terminal
-        if (ruleMap.has(this.value)) {
-            ruleMap.get(this.value).forEach(elem => {
-                let option = document.createElement('option');
-                option.text = option.value = elem;
-                select.add(option, 0);
-            })
-            document.getElementById("selectors").appendChild(select);
-            this.remove();
-        }
-        //if rule combines non terminals
-        else if (false) {
-            //generate dropdowns for all nonterminals, and insert text as needed
-        }
-        //else we have selected a terminal
-        else {
-            //insert the terminal as text
-        }
-    }
+    s.onchange = onchangeListener;
 });
 
-// Parse something!
-parser.feed("!a\\/b");
+function genDropdown(k) {
+    let select = document.createElement('select');
+    select.onchange = onchangeListener;
+    ruleMap.get(k).forEach(elem => {
+        let option = document.createElement('option');
+        option.text = option.value = elem;
+        select.add(option, 0);
+    })
+    select.selectedIndex = -1;
+    return select;
+}
 
-// parser.results is an array of possible parsings.
-console.log(parser.results); // [[[[ "foo" ],"\n" ]]]
+function onchangeListener(event) {
+    console.log(this.value)
+
+    let select = document.createElement('select');
+    select.onchange = onchangeListener;
+    //if rule if a simple non terminal
+    if (ruleMap.has(this.value)) {
+        ruleMap.get(this.value).forEach(elem => {
+            let option = document.createElement('option');
+            option.text = option.value = elem;
+            select.add(option, 0);
+        })
+        select.selectedIndex = -1;
+        document.getElementById("selectors").insertBefore(select, this);
+    }
+    //if rule combines non terminals
+    else if (Array.from(ruleMap.keys()).map(l => (this.value).includes(l))) {
+        //generate dropdowns for all nonterminals, and insert text as needed
+        let newDropdowns = this.value.split(" ").map(e => {
+            let replacementVal = document.createElement('span');
+            replacementVal.innerHTML = e.slice(1,-1)
+            Array.from(ruleMap.keys()).forEach(g => {
+                if (g == e) {
+                    replacementVal = genDropdown(g);
+                }
+            })
+            return replacementVal;
+        })
+        const openParen = document.createElement('span')
+        openParen.innerHTML = "("
+        const closeParen = document.createElement('span')
+        closeParen.innerHTML = ")"
+        newDropdowns = [openParen, ...newDropdowns, closeParen]
+        newDropdowns.forEach(elem => {
+            document.getElementById("selectors").insertBefore(elem, this);
+        });
+    }
+    //else we have selected a terminal
+    else {
+        //insert the terminal as text
+    }
+    this.remove();
+}
 
