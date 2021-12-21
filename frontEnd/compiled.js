@@ -2,6 +2,7 @@
 
 
 //using brfs to read static assets
+//expects a very simple structure of the grammar file
 const grammarDef = "formula ->  atom | \"!\" formula | formula \"OR\" formula | formula \"AND\" formula | formula \"U\" formula | \"G\" formula | \"F\" formula\natom -> \"a\" | \"b\"\n"
 let rules = grammarDef.trim().split("\n")
 const ruleMap = new Map();

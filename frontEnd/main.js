@@ -1,6 +1,7 @@
 const fs = require('fs')
 
 //using brfs to read static assets
+//expects a very simple structure of the grammar file
 const grammarDef = fs.readFileSync(__dirname + '/../grammarDef/grammar.ne', 'utf8')
 let rules = grammarDef.trim().split("\n")
 const ruleMap = new Map();
@@ -34,6 +35,7 @@ function onchangeListener(event) {
     //if rule combines non terminals
     else if (Array.from(ruleMap.keys()).map(l => (this.value).includes(l))) {
         //generate dropdowns for all nonterminals, and insert text as needed
+        //expects rule components to be space seperated
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
             replacementVal.innerHTML = e.slice(1,-1)
