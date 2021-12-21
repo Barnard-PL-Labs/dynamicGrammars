@@ -10,20 +10,9 @@ rules.forEach(r => {
     let right = rule[1].split(" | ").map(v => v.trim())
     ruleMap.set(left, right)
 });
-console.log(ruleMap);
 
 //set the initial element to the first rule of the grammar
-let select = document.getElementById('start');
-Array.from(ruleMap.values())[0].forEach(elem => {
-    let option = document.createElement('option');
-    option.text = option.value = elem;
-    select.add(option, 0);
-});
-select.selectedIndex = -1;
-
-document.getElementsByName('grammarSelector').forEach(s => {
-    s.onchange = onchangeListener;
-});
+document.getElementById("selectors").appendChild(genDropdown(Array.from(ruleMap.keys())[0]))
 
 function genDropdown(k) {
     let select = document.createElement('select');
@@ -38,19 +27,9 @@ function genDropdown(k) {
 }
 
 function onchangeListener(event) {
-    console.log(this.value)
-
-    let select = document.createElement('select');
-    select.onchange = onchangeListener;
     //if rule if a simple non terminal
     if (ruleMap.has(this.value)) {
-        ruleMap.get(this.value).forEach(elem => {
-            let option = document.createElement('option');
-            option.text = option.value = elem;
-            select.add(option, 0);
-        })
-        select.selectedIndex = -1;
-        document.getElementById("selectors").insertBefore(select, this);
+        document.getElementById("selectors").insertBefore(genDropdown(this.value), this);
     }
     //if rule combines non terminals
     else if (Array.from(ruleMap.keys()).map(l => (this.value).includes(l))) {
@@ -65,19 +44,22 @@ function onchangeListener(event) {
             })
             return replacementVal;
         })
-        const openParen = document.createElement('span')
-        openParen.innerHTML = "("
-        const closeParen = document.createElement('span')
-        closeParen.innerHTML = ")"
-        newDropdowns = [openParen, ...newDropdowns, closeParen]
+        
+        if (newDropdowns.length > 1) {
+            newDropdowns = addParens(newDropdowns)
+        }   
         newDropdowns.forEach(elem => {
             document.getElementById("selectors").insertBefore(elem, this);
         });
     }
-    //else we have selected a terminal
-    else {
-        //insert the terminal as text
-    }
+
     this.remove();
 }
 
+function addParens(ds) {
+    const openParen = document.createElement('span')
+    openParen.innerHTML = "("
+    const closeParen = document.createElement('span')
+    closeParen.innerHTML = ")"
+    return [openParen, ...ds, closeParen]
+}
