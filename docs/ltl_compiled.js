@@ -36,6 +36,7 @@ function onchangeListener(event) {
     //if rule combines non terminals
     else if (Array.from(ruleMap.keys()).map(l => (this.value).includes(l))) {
         //generate dropdowns for all nonterminals, and insert text as needed
+        //expects rule components to be space seperated
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
             replacementVal.innerHTML = e.slice(1,-1)
