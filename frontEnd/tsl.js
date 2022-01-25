@@ -4,6 +4,16 @@ const fs = require('fs')
 //expects a very simple structure of the grammar file
 const grammarDef = fs.readFileSync(__dirname + '/../grammarDef/tsl_grammar.ne', 'utf8')
 let rules = grammarDef.trim().split("\n")
+rules = rules.reduce((rs, r) => {
+    if (r.startsWith(" ")) { //any newlines need to be indented
+        addedToRule = rs[rs.length - 1] + r
+        return [...(rs.slice(0, -1)), addedToRule]
+    } else {
+        return [...rs, r]
+    }
+},
+    []);
+
 const ruleMap = new Map();
 rules.forEach(r => {
     let rule = r.split(" -> ");
@@ -38,7 +48,7 @@ function onchangeListener(event) {
         //expects rule components to be space seperated
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
-            replacementVal.innerHTML = e.slice(1,-1)
+            replacementVal.innerHTML = e.slice(1, -1)
             Array.from(ruleMap.keys()).forEach(g => {
                 if (g == e) {
                     replacementVal = genDropdown(g);
@@ -46,10 +56,10 @@ function onchangeListener(event) {
             })
             return replacementVal;
         })
-        
+
         if (newDropdowns.length > 1) {
             newDropdowns = addParens(newDropdowns)
-        }   
+        }
         newDropdowns.forEach(elem => {
             document.getElementById("selectors").insertBefore(elem, this);
         });

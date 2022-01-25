@@ -38,7 +38,7 @@ function onchangeListener(event) {
         //expects rule components to be space seperated
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
-            replacementVal.innerHTML = e.slice(1,-1)
+            replacementVal.innerHTML = e.slice(1, -1)
             Array.from(ruleMap.keys()).forEach(g => {
                 if (g == e) {
                     replacementVal = genDropdown(g);
@@ -46,10 +46,10 @@ function onchangeListener(event) {
             })
             return replacementVal;
         })
-        
+
         if (newDropdowns.length > 1) {
             newDropdowns = addParens(newDropdowns)
-        }   
+        }
         newDropdowns.forEach(elem => {
             document.getElementById("selectors").insertBefore(elem, this);
         });

@@ -3,8 +3,18 @@
 
 //using brfs to read static assets
 //expects a very simple structure of the grammar file
-const grammarDef = "formula ->  atom | \"!\" formula | formula \"OR\" formula | formula \"AND\" formula | formula \"U\" formula | \"G\" formula | \"F\" formula | predTerm | sig_out \"<-\" fxnTerm\npredTerm -> \"p_0\" | \"p_1\" fxnTerm | \"p_2\" fxnTerm fxnTerm\nfxnTerm -> sig_in | \"f_0\" | \"f_1\" fxnTerm | \"f_2\" fxnTerm fxnTerm\nsig_in -> \"inSignal_w\" | \"inSignal_x\"\nsig_out -> \"outSignal_y\" | \"outSignal_z\"\natom -> \"a\" | \"b\"\n"
+const grammarDef = "formula ->  \n    atom | \n    \"!\" formula | formula \"||\" formula | formula \"&&\" formula | \n    formula \"U\" formula | \"G\" formula | \"F\" formula | \n    predTerm | \"[\" sig_out \"<-\" fxnTerm \"]\"\npredTerm -> \"p_0\" | \"p_1\" fxnTerm | \"p_2\" fxnTerm fxnTerm\nfxnTerm -> sig_in | \"f_0\" | \"f_1\" fxnTerm | \"f_2\" fxnTerm fxnTerm \nsig_in -> \"inSignal_w\" | \"inSignal_x\"\nsig_out -> \"outSignal_y\" | \"outSignal_z\"\natom -> \"a\" | \"b\"\n"
 let rules = grammarDef.trim().split("\n")
+rules = rules.reduce((rs, r) => {
+    if (r.startsWith(" ")) { //any newlines need to be indented
+        addedToRule = rs[rs.length - 1] + r
+        return [...(rs.slice(0, -1)), addedToRule]
+    } else {
+        return [...rs, r]
+    }
+},
+    []);
+
 const ruleMap = new Map();
 rules.forEach(r => {
     let rule = r.split(" -> ");
@@ -39,7 +49,7 @@ function onchangeListener(event) {
         //expects rule components to be space seperated
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
-            replacementVal.innerHTML = e.slice(1,-1)
+            replacementVal.innerHTML = e.slice(1, -1)
             Array.from(ruleMap.keys()).forEach(g => {
                 if (g == e) {
                     replacementVal = genDropdown(g);
@@ -47,10 +57,10 @@ function onchangeListener(event) {
             })
             return replacementVal;
         })
-        
+
         if (newDropdowns.length > 1) {
             newDropdowns = addParens(newDropdowns)
-        }   
+        }
         newDropdowns.forEach(elem => {
             document.getElementById("selectors").insertBefore(elem, this);
         });
