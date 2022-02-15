@@ -12,23 +12,28 @@
   </style>
 </head>
 
+<!-- want to create a "selectors" class so the user can add or remove
+with a button. Want to try to convert everything from JS to React? Cleaner UI?-->
+
 <body>
   <h1>Structured Editor</h1>
   <p>Structured editor for TSL</p>
-  <!-- TODO modularize js code to allow for two dropdowns
+  <button id = "button1"></button>
+
 <p>always assume{</p>
-  <div id="selectors">
+  <div id="assumeSelector">
   </div>
   <p>}</p>
--->
+
+  <button id = "button2"></button>
 
   <p>always guarantee{</p>
-  <div id="selectors">
-  </div>
+  <div id = "guaranteeSelector"></div>
   <p>}</p>
+  <script src="tsl_compiled.js"></script>
 
 </body>
-<script src="tsl_compiled.js"></script>
+
 
 
 </html>

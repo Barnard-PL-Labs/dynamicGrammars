@@ -23,8 +23,22 @@ rules.forEach(r => {
     ruleMap.set(left, right)
 });
 
-//set the initial element to the first rule of the grammar
-document.getElementById("selectors").appendChild(genDropdown(Array.from(ruleMap.keys())[0]))
+//function creates a selector element by appending it to
+//existing selector div and adding it to the selector class
+//seperate selectors depending on if it resides in 
+//always assume or always guarantee (could simplify this)
+function createSelector (num) {
+    var selector = document.createElement("div");
+    selector.setAttribute("class", "selector");
+    selector.appendChild(genDropdown(Array.from(ruleMap.keys())[0]));
+    if (num == 1) {
+        document.getElementById("assumeSelector").appendChild(selector);
+    }
+    else if (num == 2) {
+        document.getElementById("guaranteeSelector").appendChild(selector);
+    }
+
+}
 
 function genDropdown(k) {
     let select = document.createElement('select');
@@ -38,10 +52,12 @@ function genDropdown(k) {
     return select;
 }
 
+//uses event.target.parentNode to accsess the selector that the listener
+//is being called on, instead of a specific id
 function onchangeListener(event) {
     //if rule if a simple non terminal
     if (ruleMap.has(this.value)) {
-        document.getElementById("selectors").insertBefore(genDropdown(this.value), this);
+        event.target.parentNode.insertBefore(genDropdown(this.value), this);
     }
     //if rule combines non terminals
     else if (Array.from(ruleMap.keys()).map(l => (this.value).includes(l))) {
@@ -62,7 +78,7 @@ function onchangeListener(event) {
             newDropdowns = addParens(newDropdowns)
         }
         newDropdowns.forEach(elem => {
-            document.getElementById("selectors").insertBefore(elem, this);
+            event.target.parentNode.insertBefore(elem, this);
         });
     }
 
@@ -75,6 +91,20 @@ function addParens(ds) {
     const closeParen = document.createElement('span')
     closeParen.innerHTML = ")"
     return [openParen, ...ds, closeParen]
+}
+
+//Create buttons for adding new lines, calls
+//create selector function when button is clicked
+let button1 = document.getElementById("button1");
+button1.innerHTML = "Add New Line";
+button1.onclick = function() {
+    createSelector(1);
+}
+
+let button2 = document.getElementById("button2");
+button2.innerHTML = "Add New Line";
+button2.onclick = function() {
+    createSelector(2);
 }
 
 },{}]},{},[1]);
