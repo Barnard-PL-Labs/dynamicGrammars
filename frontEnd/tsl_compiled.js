@@ -9,7 +9,8 @@ rules = rules.reduce((rs, r) => {
     if (r.startsWith(" ")) { //any newlines need to be indented
         addedToRule = rs[rs.length - 1] + r
         return [...(rs.slice(0, -1)), addedToRule]
-    } else {
+    }
+    else {
         return [...rs, r]
     }
 },
@@ -25,16 +26,21 @@ rules.forEach(r => {
 
 //function creates a selector element by appending it to
 //existing selector div and adding it to the selector class
-//seperate selectors depending on if it resides in 
+//separate selectors depending on if it resides in
 //always assume or always guarantee (could simplify this)
 function createSelector (num) {
+    let semi = document.createElement('semi');
+    semi.innerHTML = ";"
+
     var selector = document.createElement("div");
     selector.setAttribute("class", "selector");
     selector.appendChild(genDropdown(Array.from(ruleMap.keys())[0]));
-    if (num == 1) {
+    selector.appendChild(semi);
+
+    if (num === 1) {
         document.getElementById("assumeSelector").appendChild(selector);
     }
-    else if (num == 2) {
+    else if (num === 2) {
         document.getElementById("guaranteeSelector").appendChild(selector);
     }
 
@@ -48,11 +54,12 @@ function genDropdown(k) {
         option.text = option.value = elem;
         select.add(option, 0);
     })
+
     select.selectedIndex = -1;
     return select;
 }
 
-//uses event.target.parentNode to accsess the selector that the listener
+//uses event.target.parentNode to access the selector that the listener
 //is being called on, instead of a specific id
 function onchangeListener(event) {
     //if rule if a simple non terminal
@@ -77,6 +84,7 @@ function onchangeListener(event) {
         if (newDropdowns.length > 1) {
             newDropdowns = addParens(newDropdowns)
         }
+
         newDropdowns.forEach(elem => {
             event.target.parentNode.insertBefore(elem, this);
         });
@@ -91,6 +99,12 @@ function addParens(ds) {
     const closeParen = document.createElement('span')
     closeParen.innerHTML = ")"
     return [openParen, ...ds, closeParen]
+}
+
+function addSemi(ds) {
+    const semiColon = document.createElement('span')
+    semiColon.innerHTML = ";"
+    return [...ds, semiColon]
 }
 
 //Create buttons for adding new lines, calls
