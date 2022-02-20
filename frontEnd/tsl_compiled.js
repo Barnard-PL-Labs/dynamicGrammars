@@ -24,6 +24,18 @@ rules.forEach(r => {
     ruleMap.set(left, right)
 });
 
+function removeSelector(num) {
+    if (num == 1) {
+        if (document.getElementById("assumeSelector").children.length > 0) {
+            document.getElementById("assumeSelector").removeChild(document.getElementById("assumeSelector").lastElementChild);
+        }
+    }
+    if (num == 0) {
+        if(document.getElementById("guaranteeSelector").children.length > 0) {
+            document.getElementById("guaranteeSelector").removeChild(document.getElementById("guaranteeSelector").lastElementChild);
+        }
+    }
+}
 //function creates a selector element by appending it to
 //existing selector div and adding it to the selector class
 //separate selectors depending on if it resides in
@@ -37,10 +49,10 @@ function createSelector (num) {
     selector.appendChild(genDropdown(Array.from(ruleMap.keys())[0]));
     selector.appendChild(semi);
 
-    if (num === 1) {
+    if (num == 1) {
         document.getElementById("assumeSelector").appendChild(selector);
     }
-    else if (num === 2) {
+    else if (num == 0) {
         document.getElementById("guaranteeSelector").appendChild(selector);
     }
 
@@ -101,24 +113,31 @@ function addParens(ds) {
     return [openParen, ...ds, closeParen]
 }
 
-function addSemi(ds) {
-    const semiColon = document.createElement('span')
-    semiColon.innerHTML = ";"
-    return [...ds, semiColon]
-}
-
-//Create buttons for adding new lines, calls
-//create selector function when button is clicked
-let button1 = document.getElementById("button1");
-button1.innerHTML = "Add New Line";
-button1.onclick = function() {
+//Create buttons for adding and removing new lines, calls
+//create selector/remove selector function when button is clicked
+let addButton1 = document.getElementById("addButton1");
+addButton1.innerHTML = "+";
+addButton1.onclick = function() {
     createSelector(1);
 }
 
-let button2 = document.getElementById("button2");
-button2.innerHTML = "Add New Line";
-button2.onclick = function() {
-    createSelector(2);
+let addButton2 = document.getElementById("addButton2");
+addButton2.innerHTML = "+";
+addButton2.onclick = function() {
+    createSelector(0);
 }
+
+let removeButton1 = document.getElementById("removeButton1");
+removeButton1.innerHTML = "-";
+removeButton1.onclick = function() {
+    removeSelector(1);
+}
+
+let removeButton2 = document.getElementById("removeButton2");
+removeButton2.innerHTML = "-";
+removeButton2.onclick = function() {
+    removeSelector(0);
+}
+
 
 },{}]},{},[1]);
