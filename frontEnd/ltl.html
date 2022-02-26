@@ -1,21 +1,45 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+  <title>dynamicGrammars</title>
   <style>
-    select {margin: 5px;}
-    span {margin: 5px;}
-    </style>
+    select {
+      margin: 5px;
+    }
+    span {
+      margin: 5px;
+    }
+    .add {
+      background-color: darkseagreen;
+    }
+    .remove {
+      background-color: indianred;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Structured Editor</h1>
-  <p>Structured editor for LTL</p>
+    <h1>Structured Editor</h1>
 
-  <div id="selectors">
-  </div>
+    <p>Structured editor for LTL</p>
+    <button class="add" id="addButton1"></button>
+    <button class="remove" id="removeButton1"></button>
 
+    <p>always assume{</p>
+      <div id="assumeSelector"></div>
+    <p>}</p>
+
+    <button class="add" id="addButton2"></button>
+    <button class="remove" id="removeButton2"></button>
+
+    <p>always guarantee{</p>
+      <div id="guaranteeSelector"></div>
+    <p>}</p>
+
+    <script>
+      grammarFile = "../grammarDef/ltl_grammar.ne"
+    </script>
+    <script src="logicDropdowns.js"></script>
 </body>
-<script src="ltl_compiled.js"></script>
-
-
 </html>
