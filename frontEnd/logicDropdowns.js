@@ -117,21 +117,34 @@ function addParens(ds) {
 
 //extract button and function, right now can only console.log logic
 //should probably make a condition where you can only extract if there are no empty dropdowns
+function download(text, name, type) {
+    var a = document.getElementById("a");
+    var file = new Blob([text], {type: type});
+    a.href = URL.createObjectURL(file);
+    a.download = name;
+}
 
-const extractContent = (htmlBody) => {
+function extractContent (assumeBody, guaranteeBody) {
+    document.getElementById("a").style.visibility = "visible";
+    let htmlBody = assumeBody + '\n' + guaranteeBody;
     const logicText = document.createElement('span')
     logicText.innerHTML = htmlBody;
     return logicText.innerText;
 }
 
 let extract = document.getElementById("extract")
-extract.innerHTML = "extract";
+extract.innerHTML = "Extract Logic";
 extract.onclick = function () {
-    console.log(
-        extractContent(document.getElementById("assume").innerText),
-        '\n',
-        extractContent(document.getElementById("guarantee").innerText));
+    download(
+        extractContent(
+            document.getElementById("assume").innerText,
+            document.getElementById("guarantee").innerText
+        ),
+        'logicspecs.txt',
+        'text/plain'
+    )
 }
+
 
 //Create buttons for adding and removing new lines, calls
 //create selector/remove selector function when button is clicked
