@@ -133,14 +133,14 @@ function extractContent (assumeBody, guaranteeBody) {
 }
 
 let extract = document.getElementById("extract")
-extract.innerHTML = "Extract Logic";
+extract.innerHTML = "Extract formula";
 extract.onclick = function () {
     download(
         extractContent(
             document.getElementById("assume").innerText,
             document.getElementById("guarantee").innerText
         ),
-        'logicspecs.txt',
+        'logicspecs.tsl',
         'text/plain'
     )
 }
