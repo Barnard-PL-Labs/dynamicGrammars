@@ -41,6 +41,7 @@ function removeSelector(num,obj) {
 //separate selectors depending on if it resides in
 
 //always assume or always guarantee (could simplify this)
+var numRows = 0;
 function createSelector (num) {
     let semi = document.createElement('semi');
     semi.innerHTML = ";"
@@ -48,6 +49,7 @@ function createSelector (num) {
     //add remove button after each line
     let removeButton = document.createElement("removeButton");
     removeButton.innerHTML = "<button class=\"remove\" id=\"removeButton\">-</button>";
+    numRows = numRows+1;
 
     var selector = document.createElement("div");
     selector.setAttribute("class", "selector");
@@ -138,13 +140,25 @@ function extractContent (assumeBody, guaranteeBody) {
     console.log(htmlBody)
     const logicText = document.createElement('span')
     logicText.innerHTML = htmlBody;
-    //console.log(htmlBody)
+    console.log(htmlBody)
     return logicText.innerText;
+}
+
+//delete - button function
+function delButton(num){
+    while (num>0){
+        var deleteButton = document.getElementById("removeButton");
+        deleteButton.parentNode.removeChild(deleteButton);
+        num = num-1;
+    }
 }
 
 let extract = document.getElementById("extract")
 extract.innerHTML = "Extract formula";
 extract.onclick = function () {
+    //delete - button here
+    delButton(numRows);
+    numRows=0;
     download(
         extractContent(
             document.getElementById("assume").innerText,
