@@ -26,15 +26,15 @@ async function loadGrammar() {
 }
 loadGrammar();
 
-function removeSelector(obj) {
-    var oParent = obj.parentNode.parentNode;
-    document.getElementById("selector").removeChild(oParent);
+function removeSelector(num,obj) {
+    if (num == 1) {
+        document.getElementById('assumeSelector').removeChild(obj.parentNode);
+    }
+    if (num == 0) {
+        document.getElementById('guaranteeSelector').removeChild(obj.parentNode);
+    }
 }
 
-function createRemoveButton() {
-    let removeButton = document.createElement("removeButton");
-    removeButton.innerHTML = "<button class=\"remove\" text=\"-\" id=\"removeButton\"></button>";
-}
 //function creates a selector element by appending it to
 //existing selector div and adding it to the selector class
 //separate selectors depending on if it resides in
@@ -56,12 +56,11 @@ function createSelector (num) {
 
     if (num == 1) {
         document.getElementById("assumeSelector").appendChild(selector);
+        removeButton.setAttribute('onclick', 'removeSelector(1,this)');
     }
     else if (num == 0) {
         document.getElementById("guaranteeSelector").appendChild(selector);
-    }
-    removeButton.onclick = function() {
-        removeSelector('this');
+        removeButton.setAttribute('onclick', 'removeSelector(0,this)');
     }
 
 }
@@ -135,6 +134,7 @@ function extractContent (assumeBody, guaranteeBody) {
     let htmlBody = assumeBody + '\n' + guaranteeBody;
     const logicText = document.createElement('span')
     logicText.innerHTML = htmlBody;
+    //console.log(htmlBody)
     return logicText.innerText;
 }
 
