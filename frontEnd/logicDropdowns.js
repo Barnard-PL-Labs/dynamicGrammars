@@ -26,36 +26,42 @@ async function loadGrammar() {
 }
 loadGrammar();
 
-function removeSelector(num) {
-    if (num == 1) {
-        if (document.getElementById("assumeSelector").children.length > 0) {
-            document.getElementById("assumeSelector").removeChild(document.getElementById("assumeSelector").lastElementChild);
-        }
-    }
-    if (num == 0) {
-        if(document.getElementById("guaranteeSelector").children.length > 0) {
-            document.getElementById("guaranteeSelector").removeChild(document.getElementById("guaranteeSelector").lastElementChild);
-        }
-    }
+function removeSelector(obj) {
+    var oParent = obj.parentNode.parentNode;
+    document.getElementById("selector").removeChild(oParent);
+}
+
+function createRemoveButton() {
+    let removeButton = document.createElement("removeButton");
+    removeButton.innerHTML = "<button class=\"remove\" text=\"-\" id=\"removeButton\"></button>";
 }
 //function creates a selector element by appending it to
 //existing selector div and adding it to the selector class
 //separate selectors depending on if it resides in
+
 //always assume or always guarantee (could simplify this)
 function createSelector (num) {
     let semi = document.createElement('semi');
     semi.innerHTML = ";"
 
+    //add remove button after each line
+    let removeButton = document.createElement("removeButton");
+    removeButton.innerHTML = "<button class=\"remove\" id=\"removeButton\">-</button>";
+
     var selector = document.createElement("div");
     selector.setAttribute("class", "selector");
     selector.appendChild(genDropdown(Array.from(ruleMap.keys())[0]));
     selector.appendChild(semi);
+    selector.appendChild(removeButton);
 
     if (num == 1) {
         document.getElementById("assumeSelector").appendChild(selector);
     }
     else if (num == 0) {
         document.getElementById("guaranteeSelector").appendChild(selector);
+    }
+    removeButton.onclick = function() {
+        removeSelector('this');
     }
 
 }
@@ -159,17 +165,3 @@ addButton2.innerHTML = "+";
 addButton2.onclick = function() {
     createSelector(0);
 }
-
-let removeButton1 = document.getElementById("removeButton1");
-removeButton1.innerHTML = "-";
-removeButton1.onclick = function() {
-    removeSelector(1);
-}
-
-let removeButton2 = document.getElementById("removeButton2");
-removeButton2.innerHTML = "-";
-removeButton2.onclick = function() {
-    removeSelector(0);
-}
-
-    
