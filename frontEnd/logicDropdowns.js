@@ -144,31 +144,28 @@ function extractContent (assumeBody, guaranteeBody) {
     return logicText.innerText;
 }
 
-//delete - button function
-function delButton(num){
-    while (num>0){
-        var deleteButton = document.getElementById("removeButton");
-        deleteButton.parentNode.removeChild(deleteButton);
-        num = num-1;
+//delete -
+function delDel(text){
+    while(numRows>0){
+        text = text.replace(";-", ";");
+        numRows = numRows-1;
     }
+    return text;
 }
 
 let extract = document.getElementById("extract")
 extract.innerHTML = "Extract formula";
 extract.onclick = function () {
-    //delete - button here
-    delButton(numRows);
-    numRows=0;
     download(
-        extractContent(
+        delDel(extractContent(
             document.getElementById("assume").innerText,
             document.getElementById("guarantee").innerText
-        ),
+        )),
         'logicspecs.tsl',
         'text/plain'
     )
-}
 
+}
 
 //Create buttons for adding and removing new lines, calls
 //create selector/remove selector function when button is clicked
