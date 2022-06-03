@@ -6,6 +6,7 @@ async function loadGrammar() {
     let rules = grammarDef.trim().split("\n")
 
     rules = rules.reduce((rs, r) => {
+
         if (r.startsWith(" ")) { //any newlines need to be indented
             addedToRule = rs[rs.length - 1] + r
             return [...(rs.slice(0, -1)), addedToRule]
@@ -14,7 +15,7 @@ async function loadGrammar() {
             return [...rs, r]
         }
     }, []);
-    
+
     ruleMap = new Map();
     rules.forEach(r => {
         let rule = r.split(" -> ");
@@ -86,7 +87,8 @@ function onchangeListener(event) {
         //expects rule components to be space seperated
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
-            replacementVal.innerHTML = e.slice(1, -1)
+            //deal with spacing here
+            replacementVal.innerHTML = " " + e.slice(1, -1) + " "
             Array.from(ruleMap.keys()).forEach(g => {
                 if (g == e) {
                     replacementVal = genDropdown(g);
@@ -102,8 +104,8 @@ function onchangeListener(event) {
         newDropdowns.forEach(elem => {
             event.target.parentNode.insertBefore(elem, this);
         });
-    }
 
+    }
     this.remove();
 }
 
@@ -124,9 +126,11 @@ function download(text, name, type) {
     a.download = name;
 }
 
+//add spacing here
 function extractContent (assumeBody, guaranteeBody) {
     document.getElementById("a").style.visibility = "visible";
     let htmlBody = assumeBody + '\n' + guaranteeBody;
+    console.log(htmlBody)
     const logicText = document.createElement('span')
     logicText.innerHTML = htmlBody;
     return logicText.innerText;
