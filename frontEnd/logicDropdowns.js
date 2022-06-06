@@ -63,11 +63,16 @@ function createSelector (num) {
         document.getElementById("guaranteeSelector").appendChild(selector);
         removeButton.setAttribute('onclick', 'removeSelector(0,this)');
     }
+}
 
+function change() {
+    event.target.dispatchEvent(new MouseEvent('mouseover', {bubbles: true}));
 }
 
 function genDropdown(k) {
     let select = document.createElement('select');
+    select.setAttribute('onmouseover', 'change()')
+
     select.onchange = onchangeListener;
     ruleMap.get(k).forEach(elem => {
         let option = document.createElement('option');
@@ -109,7 +114,6 @@ function onchangeListener(event) {
         newDropdowns.forEach(elem => {
             event.target.parentNode.insertBefore(elem, this);
         });
-
     }
     this.remove();
 }
@@ -122,7 +126,7 @@ function addParens(ds) {
     return [openParen, ...ds, closeParen]
 }
 
-//extract button and function, right now can only console.log logic
+//extract button and function
 //should probably make a condition where you can only extract if there are no empty dropdowns
 function download(text, name, type) {
     var a = document.getElementById("a");
@@ -131,18 +135,15 @@ function download(text, name, type) {
     a.download = name;
 }
 
-//add spacing here
 function extractContent (assumeBody, guaranteeBody) {
     document.getElementById("a").style.visibility = "visible";
     let htmlBody = assumeBody + '\n' + guaranteeBody;
-    console.log(htmlBody)
     const logicText = document.createElement('span')
     logicText.innerHTML = htmlBody;
-    //console.log(htmlBody)
     return logicText.innerText;
 }
 
-let extract = document.getElementById("extract")
+/*let extract = document.getElementById("extract")
 extract.innerHTML = "Extract formula";
 extract.onclick = function () {
     download(
@@ -154,7 +155,20 @@ extract.onclick = function () {
         'text/plain'
     )
 }
+ */
 
+function callSynth() {
+    tslSpec = document.getElementById("specBox").value;
+    tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
+    targetLang = document.getElementById("targetLang").value;
+    fetch("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec+"&target="+targetLang)
+        .then(response => {
+            response.text().then(function(text) {
+                document.getElementById("codeBox").value = text;
+            });
+        })
+        .catch(error => console.error(error));
+}
 
 //Create buttons for adding and removing new lines, calls
 //create selector/remove selector function when button is clicked

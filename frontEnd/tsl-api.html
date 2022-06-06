@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.88.1">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>dynamicGrammars</title>
+    <link href="editor.css" rel="stylesheet">
+</head>
+
+<body>
+<main>
+    <h1>Structured Editor for TSL</h1>
+
+    <p id="intro">Run TSL Synthesis from your browser</p>
+    <div class="center">
+        <main>
+            <button type="submit" onclick="callSynth()">Run Synthesis</button>
+            <select id="targetLang">
+                <option value="js">javascript</option>
+                <option value="python">python</option>
+                <option value="xstate">xstate</option>
+            </select>
+            <!--<button style="background-color:lightskyblue">Play Music!</button>-->
+        </main>
+    </div>
+    <div class="row" style="padding: 10px;margin-left: -23px;">
+    <div id="tslEditor" class="column">
+        <p>Build TSL Formula</p>
+        <div class="scroll">
+            <button class="add" id="addButton1"></button>
+            <div id="assume">
+                <p>always assume {</p>
+                <div id="assumeSelector"></div>
+                <p>}</p>
+            </div>
+            <button class="add" id="addButton2"></button>
+            <div id="guarantee">
+                <p>always guarantee {</p>
+                <div id="guaranteeSelector"></div>
+                <p>}</p>
+            </div>
+
+            <p></p>
+            <a href="" id="a" style="visibility: hidden">Download Your TSL File</a>
+        </div>
+    </div>
+    <div class="column">
+        <p>Get the code here</p>
+        <textarea id="codeBox" rows="10" spellcheck="false" style="width:100%;height:300px;padding:10px"></textarea>
+    </div>
+    </div>
+
+    <script>grammarFile = "../grammarDef/tsl_grammar.ne"</script>
+    <script src="logicDropdowns.js"></script>
+</main>
+</body>
+</html>
+
