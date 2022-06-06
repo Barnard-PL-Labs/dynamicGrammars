@@ -1,8 +1,8 @@
 let ruleMap = ""
 async function loadGrammar() {
     let grammarDef = await fetch(grammarFile) //grammarFile defined in .html
-            .then(response => {return response.text();});
-    
+        .then(response => {return response.text();});
+
     let rules = grammarDef.trim().split("\n")
 
     rules = rules.reduce((rs, r) => {
@@ -65,16 +65,11 @@ function createSelector (num) {
         document.getElementById("guaranteeSelector").appendChild(selector);
         removeButton.setAttribute('onclick', 'removeSelector(0,this)');
     }
-}
 
-function change() {
-    event.target.dispatchEvent(new MouseEvent('mouseover', {bubbles: true}));
 }
 
 function genDropdown(k) {
     let select = document.createElement('select');
-    select.setAttribute('onmouseover', 'change()')
-
     select.onchange = onchangeListener;
     ruleMap.get(k).forEach(elem => {
         let option = document.createElement('option');
@@ -116,6 +111,7 @@ function onchangeListener(event) {
         newDropdowns.forEach(elem => {
             event.target.parentNode.insertBefore(elem, this);
         });
+
     }
     this.remove();
 }
@@ -128,29 +124,21 @@ function addParens(ds) {
     return [openParen, ...ds, closeParen]
 }
 
-function callSynth() {
-    tslSpec = delDel(extractContent(document.getElementById("assume").innerText,
-        document.getElementById("guarantee").innerText));
-    console.log(document.getElementById(("assume").innerText));
-    tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
-    console.log(tslSpec);
-    targetLang = document.getElementById("targetLang").value;
-    fetch("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec+"&target="+targetLang)
-        .then(response => {
-            response.text().then(function(text) {
-                document.getElementById("codeBox").value = text;
-            });
-        })
-        .catch(error => console.error(error));
+//extract button and function, right now can only console.log logic
+//should probably make a condition where you can only extract if there are no empty dropdowns
+function download(text, name, type) {
+    var a = document.getElementById("a");
+    var file = new Blob([text], {type: type});
+    a.href = URL.createObjectURL(file);
+    a.download = name;
 }
 
 //add spacing here
-function extractContent (assumeBody, guaranteeBody) {
+function extractContents (assumeBody, guaranteeBody) {
+    document.getElementById("a").style.visibility = "visible";
     let htmlBody = assumeBody + '\n' + guaranteeBody;
-    console.log(htmlBody)
     const logicText = document.createElement('span')
     logicText.innerHTML = htmlBody;
-    console.log(htmlBody)
     return logicText.innerText;
 }
 

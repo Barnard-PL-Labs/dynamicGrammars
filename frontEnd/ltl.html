@@ -49,5 +49,18 @@
       grammarFile = "../grammarDef/ltl_grammar.ne"
     </script>
     <script src="logicDropdowns.js"></script>
+    <script>
+        let extract = document.getElementById("extract")
+        extract.innerHTML = "Extract formula";
+        extract.onclick = function () {
+            download(
+                delDel(extractContents(
+                    document.getElementById("assume").innerText,
+                    document.getElementById("guarantee").innerText
+                )),
+                'logicspecs.tsl',
+                'text/plain'
+            )}
+    </script>
 </body>
 </html>
