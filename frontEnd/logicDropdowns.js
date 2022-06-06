@@ -128,55 +128,6 @@ function addParens(ds) {
     return [openParen, ...ds, closeParen]
 }
 
-//extract button and function
-//should probably make a condition where you can only extract if there are no empty dropdowns
-function download(text, name, type) {
-    var a = document.getElementById("a");
-    var file = new Blob([text], {type: type});
-    a.href = URL.createObjectURL(file);
-    a.download = name;
-}
-
-function extractContent (assumeBody, guaranteeBody) {
-    document.getElementById("a").style.visibility = "visible";
-    let htmlBody = assumeBody + '\n' + guaranteeBody;
-    const logicText = document.createElement('span')
-    logicText.innerHTML = htmlBody;
-<<<<<<< HEAD
-    return logicText.innerText;
-}
-
-/*let extract = document.getElementById("extract")
-=======
-    console.log(htmlBody)
-    return logicText.innerText;
-}
-
-//delete -
-function delDel(text){
-    while(numRows>0){
-        text = text.replace(";-", ";");
-        numRows = numRows-1;
-    }
-    return text;
-}
-
-let extract = document.getElementById("extract")
->>>>>>> 1321f5aa9de6c0869c851c21e7126103395910f2
-extract.innerHTML = "Extract formula";
-extract.onclick = function () {
-    download(
-        delDel(extractContent(
-            document.getElementById("assume").innerText,
-            document.getElementById("guarantee").innerText
-        )),
-        'logicspecs.tsl',
-        'text/plain'
-    )
-<<<<<<< HEAD
-}
- */
-
 function callSynth() {
     tslSpec = document.getElementById("specBox").value;
     tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
@@ -188,9 +139,35 @@ function callSynth() {
             });
         })
         .catch(error => console.error(error));
-=======
+}
 
->>>>>>> 1321f5aa9de6c0869c851c21e7126103395910f2
+//extract button and function, right now can only console.log logic
+//should probably make a condition where you can only extract if there are no empty dropdowns
+function download(text, name, type) {
+    var a = document.getElementById("a");
+    var file = new Blob([text], {type: type});
+    a.href = URL.createObjectURL(file);
+    a.download = name;
+}
+
+//add spacing here
+function extractContent (assumeBody, guaranteeBody) {
+    document.getElementById("a").style.visibility = "visible";
+    let htmlBody = assumeBody + '\n' + guaranteeBody;
+    console.log(htmlBody)
+    const logicText = document.createElement('span')
+    logicText.innerHTML = htmlBody;
+    console.log(htmlBody)
+    return logicText.innerText;
+}
+
+//delete -
+function delDel(text){
+    while(numRows>0){
+        text = text.replace(";-", ";");
+        numRows = numRows-1;
+    }
+    return text;
 }
 
 //Create buttons for adding and removing new lines, calls
