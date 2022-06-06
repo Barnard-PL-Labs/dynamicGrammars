@@ -41,6 +41,7 @@ function removeSelector(num,obj) {
 //separate selectors depending on if it resides in
 
 //always assume or always guarantee (could simplify this)
+var numRows = 0;
 function createSelector (num) {
     let semi = document.createElement('semi');
     semi.innerHTML = ";"
@@ -48,6 +49,7 @@ function createSelector (num) {
     //add remove button after each line
     let removeButton = document.createElement("removeButton");
     removeButton.innerHTML = "<button class=\"remove\" id=\"removeButton\">-</button>";
+    numRows = numRows+1;
 
     var selector = document.createElement("div");
     selector.setAttribute("class", "selector");
@@ -140,20 +142,38 @@ function extractContent (assumeBody, guaranteeBody) {
     let htmlBody = assumeBody + '\n' + guaranteeBody;
     const logicText = document.createElement('span')
     logicText.innerHTML = htmlBody;
+<<<<<<< HEAD
     return logicText.innerText;
 }
 
 /*let extract = document.getElementById("extract")
+=======
+    console.log(htmlBody)
+    return logicText.innerText;
+}
+
+//delete -
+function delDel(text){
+    while(numRows>0){
+        text = text.replace(";-", ";");
+        numRows = numRows-1;
+    }
+    return text;
+}
+
+let extract = document.getElementById("extract")
+>>>>>>> 1321f5aa9de6c0869c851c21e7126103395910f2
 extract.innerHTML = "Extract formula";
 extract.onclick = function () {
     download(
-        extractContent(
+        delDel(extractContent(
             document.getElementById("assume").innerText,
             document.getElementById("guarantee").innerText
-        ),
+        )),
         'logicspecs.tsl',
         'text/plain'
     )
+<<<<<<< HEAD
 }
  */
 
@@ -168,6 +188,9 @@ function callSynth() {
             });
         })
         .catch(error => console.error(error));
+=======
+
+>>>>>>> 1321f5aa9de6c0869c851c21e7126103395910f2
 }
 
 //Create buttons for adding and removing new lines, calls
