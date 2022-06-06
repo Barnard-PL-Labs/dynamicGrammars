@@ -129,8 +129,11 @@ function addParens(ds) {
 }
 
 function callSynth() {
-    tslSpec = document.getElementById("specBox").value;
+    tslSpec = delDel(extractContent(document.getElementById("assume").innerText,
+        document.getElementById("guarantee").innerText));
+    console.log(document.getElementById(("assume").innerText));
     tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
+    console.log(tslSpec);
     targetLang = document.getElementById("targetLang").value;
     fetch("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec+"&target="+targetLang)
         .then(response => {
@@ -141,18 +144,8 @@ function callSynth() {
         .catch(error => console.error(error));
 }
 
-//extract button and function, right now can only console.log logic
-//should probably make a condition where you can only extract if there are no empty dropdowns
-function download(text, name, type) {
-    var a = document.getElementById("a");
-    var file = new Blob([text], {type: type});
-    a.href = URL.createObjectURL(file);
-    a.download = name;
-}
-
 //add spacing here
 function extractContent (assumeBody, guaranteeBody) {
-    document.getElementById("a").style.visibility = "visible";
     let htmlBody = assumeBody + '\n' + guaranteeBody;
     console.log(htmlBody)
     const logicText = document.createElement('span')
