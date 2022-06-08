@@ -49,7 +49,6 @@ function createSelector (num) {
     //add remove button after each line
     let removeButton = document.createElement("removeButton");
     removeButton.innerHTML = "<button class=\"remove\" id=\"removeButton\">-</button>";
-    numRows = numRows+1;
 
     var selector = document.createElement("div");
     selector.setAttribute("class", "selector");
@@ -144,10 +143,7 @@ function extractContents (assumeBody, guaranteeBody) {
 
 //delete -
 function delDel(text){
-    while(numRows>0){
-        text = text.replace(";-", ";");
-        numRows = numRows-1;
-    }
+    text = text.replace(";-", ";");
     return text;
 }
 
