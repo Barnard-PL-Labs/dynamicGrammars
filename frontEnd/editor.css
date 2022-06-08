@@ -40,3 +40,5 @@ h1 {text-align: center}
 textarea{
     resize: none;
 }
+
+.hide{ display:none; }
