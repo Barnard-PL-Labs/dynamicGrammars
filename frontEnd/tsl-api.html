@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="generator" content="Hugo 0.88.1">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/tone"></script>
     <title>dynamicGrammars</title>
     <link href="editor.css" rel="stylesheet">
 </head>
@@ -27,7 +28,7 @@
                 <option value="python">python</option>
                 <option value="xstate">xstate</option>
             </select>
-            <!--<button style="background-color:lightskyblue">Play Music!</button>-->
+            <button id="play-button" style="background-color:lightskyblue">Play Music!</button>
         </main>
     </div>
     <div class="row" style="padding: 10px;margin-left: -23px;">
@@ -74,7 +75,7 @@ always guarantee {
     </div>
     </div>
 
-    <script>grammarFile = "../grammarDef/tsl_grammar.ne"</script>
+    <script>grammarFile = "../grammarDef/tsl_musicGrammar.ne"</script>
     <script src="dropdownsForAPI.js"></script>
     <script src="logicDropdowns.js"></script>
 </main>
