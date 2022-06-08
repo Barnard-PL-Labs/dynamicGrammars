@@ -18,8 +18,8 @@ function callSynth(id) {
                 let script = document.createElement("script");
                 let temp = "function updateStateMachine(){\n" + text + "}"
                 //gotta change this at some point!
-                temp = temp.replace("G4", "\"G4\"")
-                temp = temp.replace("E4", "\"E4\"")
+                temp = temp.replaceAll("G4", "\"G4\"")
+                temp = temp.replaceAll("E4", "\"E4\"")
                 script.text = temp;
                 script.setAttribute("id", "synth_script");
                 document.body.appendChild(script);
