@@ -10,6 +10,9 @@
     <title>dynamicGrammars</title>
     <link href="editor.css" rel="stylesheet">
 </head>
+<script>
+    var editorNum=0;
+</script>
 
 <body>
 <main>
@@ -18,7 +21,7 @@
     <p id="intro">Run TSL Synthesis from your browser</p>
     <div class="center">
         <main>
-            <button type="submit" onclick="callSynth()">Run Synthesis</button>
+            <button type="submit" onclick="callSynth(editorNum)">Run Synthesis</button>
             <select id="targetLang">
                 <option value="js">javascript</option>
                 <option value="python">python</option>
@@ -28,8 +31,11 @@
         </main>
     </div>
     <div class="row" style="padding: 10px;margin-left: -23px;">
-    <div id="tslEditor" class="column">
-        <p>Build TSL Formula</p>
+    <div id="tslEditor" class="column SE">
+        <p>Build TSL Formula
+            <button style="background-color:lightskyblue">Structured Editor</button>
+            <button onclick="toTE()">Text Editor</button>
+        </p>
 
         <div class="scroll">
             <button class="add" id="addButton1"></button>
@@ -46,6 +52,21 @@
             </div>
         </div>
     </div>
+        <div class="column TE" style="display: none">
+            <p>Enter TSL Formula
+                <button onclick="toSE()">Structured Editor</button>
+                <button style="background-color:lightskyblue">Text Editor</button>
+            </p>
+            <textarea class="scroll" id="specBox" rows="10" spellcheck="false" style="...">
+always assume {
+
+}
+
+always guarantee {
+( F ( [ outSignal_z <- inSignal_x ] ));
+}
+            </textarea>
+        </div>
 
     <div class="column">
         <p>Get the code here</p>
