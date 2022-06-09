@@ -1,4 +1,12 @@
 function callSynth(id) {
+    //reset updateStateMachine() after every synthesis
+    let prevSynthesized = document.getElementById("synth_script");
+    if(prevSynthesized)
+        prevSynthesized.remove();
+    currentState = 0
+    noteToPlay = ""
+
+    //switch between interfaces
     if (id==0){
         // structured editor
         tslSpec = delDel(extractContent(document.getElementById("assume").innerText,
@@ -14,7 +22,8 @@ function callSynth(id) {
         .then(response => {
             response.text().then(function(text) {
                 document.getElementById("codeBox").value = text;
-                console.log(text)
+
+                //append generated script code to client side
                 let script = document.createElement("script");
                 let temp = "function updateStateMachine(){\n" + text + "}"
                 //gotta change this at some point!
@@ -51,6 +60,7 @@ function extractContent (assumeBody, guaranteeBody) {
     return logicText.innerText;
 }
 
+//template
 var first = true;
 document.getElementById("play-button").addEventListener("click", function() {
     if (first) {
