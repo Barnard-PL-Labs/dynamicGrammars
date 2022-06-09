@@ -143,7 +143,7 @@ function extractContents (assumeBody, guaranteeBody) {
 
 //delete -
 function delDel(text){
-    text = text.replace(";-", ";");
+    text = text.replaceAll(";-", ";");
     return text;
 }
 
