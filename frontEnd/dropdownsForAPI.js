@@ -32,7 +32,7 @@ function callSynth(id) {
                 //gotta change this at some point!
                 temp = temp.replaceAll("G4", "\"G4\"")
                 temp = temp.replaceAll("E4", "\"E4\"")
-                temp = temp.replaceAll("eightnote", "\"8n\"")
+                temp = temp.replaceAll("eigthnote", "\"8n\"")
                 temp = temp.replaceAll("halfnote", "\"2n\"")
                 script.text = temp;
                 script.setAttribute("id", "synth_script");
