@@ -5,7 +5,7 @@ function callSynth(id) {
         prevSynthesized.remove();
     currentState = 0
     noteToPlay = ""
-    rhythm = ""
+    rhythm = "8n"
 
     //switch between interfaces
     if (id==0){
