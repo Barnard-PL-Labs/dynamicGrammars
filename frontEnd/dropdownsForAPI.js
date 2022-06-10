@@ -5,6 +5,7 @@ function callSynth(id) {
         prevSynthesized.remove();
     currentState = 0
     noteToPlay = ""
+    rhythm = ""
 
     //switch between interfaces
     if (id==0){
@@ -16,6 +17,7 @@ function callSynth(id) {
         // text editor
         tslSpec = document.getElementById("specBox").value;
     }
+    console.log(tslSpec)
     tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
     targetLang = document.getElementById("targetLang").value;
     fetch("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec+"&target="+targetLang)
@@ -26,11 +28,15 @@ function callSynth(id) {
                 //append generated script code to client side
                 let script = document.createElement("script");
                 let temp = "function updateStateMachine(){\n" + text + "}"
+
                 //gotta change this at some point!
                 temp = temp.replaceAll("G4", "\"G4\"")
                 temp = temp.replaceAll("E4", "\"E4\"")
+                temp = temp.replaceAll("eightnote", "\"8n\"")
+                temp = temp.replaceAll("halfnote", "\"2n\"")
                 script.text = temp;
                 script.setAttribute("id", "synth_script");
+                console.log(script.innerText)
                 document.body.appendChild(script);
             });
         })
@@ -62,25 +68,30 @@ function extractContent (assumeBody, guaranteeBody) {
 
 //template
 var first = true;
-document.getElementById("play-button").addEventListener("click", function() {
+let playButton = document.getElementById("play-button")
+playButton.addEventListener("click", function() {
     if (first) {
+        playButton.innerText = "Pause Music!"
         const synthA = new Tone.Synth().toDestination();
         //play a note every quarter-note
         const loopA = new Tone.Loop(time => {
             updateStateMachine();
             console.log(time);
-            synthA.triggerAttackRelease(noteToPlay, "8n", time);
+            synthA.triggerAttackRelease(noteToPlay, rhythm, time);
         }, "4n").start(0);
         first = false;
     }
     if (Tone.Transport.state !== 'started') {
         // the loop starts when the Transport is started
         Tone.Transport.start()
+        playButton.innerText = "Pause Music!"
     }
     else {
         Tone.Transport.stop();
+        playButton.innerText = "Play Music!"
     }
 });
 
 var currentState = 0
 let noteToPlay = ""
+let rhythm = ""
