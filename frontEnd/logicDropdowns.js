@@ -69,6 +69,7 @@ function createSelector (num) {
 
 function genDropdown(k) {
     let select = document.createElement('select');
+    select.ariaLabel="tsl dropdown";
     select.onchange = onchangeListener;
     ruleMap.get(k).forEach(elem => {
         let option = document.createElement('option');
@@ -94,7 +95,7 @@ function onchangeListener(event) {
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
             //deal with spacing here
-            replacementVal.innerHTML = " " + e.slice(1, -1) + " "
+            replacementVal.innerHTML = " " + e.slice(1, -1) + " ";
             Array.from(ruleMap.keys()).forEach(g => {
                 if (g == e) {
                     replacementVal = genDropdown(g);
@@ -104,7 +105,7 @@ function onchangeListener(event) {
         })
 
         if (newDropdowns.length > 1) {
-            newDropdowns = addParens(newDropdowns)
+            newDropdowns = addParens(newDropdowns);
         }
 
         newDropdowns.forEach(elem => {
@@ -116,11 +117,11 @@ function onchangeListener(event) {
 }
 
 function addParens(ds) {
-    const openParen = document.createElement('span')
-    openParen.innerHTML = "("
-    const closeParen = document.createElement('span')
-    closeParen.innerHTML = ")"
-    return [openParen, ...ds, closeParen]
+    const openParen = document.createElement('span');
+    openParen.innerHTML = "(";
+    const closeParen = document.createElement('span');
+    closeParen.innerHTML = ")";
+    return [openParen, ...ds, closeParen];
 }
 
 //extract button and function, right now can only console.log logic
@@ -132,7 +133,6 @@ function download(text, name, type) {
     a.download = name;
 }
 
-//add spacing here
 function extractContents (assumeBody, guaranteeBody) {
     document.getElementById("a").style.visibility = "visible";
     let htmlBody = assumeBody + '\n' + guaranteeBody;
