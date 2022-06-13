@@ -9,8 +9,7 @@ Whereas structured editors tend to be too restrictive and cumbersome in general 
 
 ## Try a live demo
 
-<p><a href="frontEnd/ltl.html">Structured editor for LTL</a></p>
-<p><a href="frontEnd/tsl.html">Structured editor for TSL</a></p>
+<p><a href="frontEnd/tsl-api.html">Structured editor for TSL</a></p>
 
 ## install
 
