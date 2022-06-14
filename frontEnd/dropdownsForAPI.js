@@ -44,6 +44,8 @@ function callSynth(id) {
 }
 
 function toTE() {
+    document.getElementById('specBox').innerHTML = delDel(extractContent(document.getElementById("assume").innerText,
+        document.getElementById("guarantee").innerText));
     document.getElementsByClassName('SE')[0].
         style.display = 'none';
     document.getElementsByClassName('TE')[0].
