@@ -1,13 +1,15 @@
+var currentState = 0
+let noteToPlay = ""
+let rhythm = "8n"
+var buttonPress = false
+
 function callSynth(id) {
     //reset updateStateMachine() after every synthesis
     let prevSynthesized = document.getElementById("synth_script");
-    if(prevSynthesized)
+    if(prevSynthesized) {
         prevSynthesized.remove();
-    currentState = 0
-    noteToPlay = "G4"
-    rhythm = "8n"
-    buttonPress = false
-
+    }
+    reset();
     //switch between interfaces
     if (id==0){
         // structured editor
@@ -18,7 +20,6 @@ function callSynth(id) {
         // text editor
         tslSpec = document.getElementById("specBox").value;
     }
-    console.log(tslSpec)
     tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
     targetLang = document.getElementById("targetLang").value;
     fetch("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec+"&target="+targetLang)
@@ -29,7 +30,6 @@ function callSynth(id) {
                 //append generated script code to client side
                 let script = document.createElement("script");
                 let temp = "function updateStateMachine(){\n" + text + "}"
-
                 //gotta change this at some point!
                 temp = temp.replaceAll("G4", "\"G4\"")
                 temp = temp.replaceAll("E4", "\"E4\"")
@@ -37,7 +37,6 @@ function callSynth(id) {
                 temp = temp.replaceAll("halfnote", "\"2n\"")
                 script.text = temp;
                 script.setAttribute("id", "synth_script");
-                console.log(script.innerText)
                 document.body.appendChild(script);
             });
         })
@@ -45,6 +44,8 @@ function callSynth(id) {
 }
 
 function toTE() {
+    document.getElementById('specBox').innerHTML = delDel(extractContent(document.getElementById("assume").innerText,
+        document.getElementById("guarantee").innerText));
     document.getElementsByClassName('SE')[0].
         style.display = 'none';
     document.getElementsByClassName('TE')[0].
@@ -67,6 +68,15 @@ function extractContent (assumeBody, guaranteeBody) {
     return logicText.innerText;
 }
 
+function reset() {
+    currentState = 0
+    noteToPlay = ""
+    rhythm = "8n"
+    buttonPress = false
+}
+
+function pressed() {buttonPress = true;}
+
 //template
 var first = true;
 let playButton = document.getElementById("play-button")
@@ -78,8 +88,12 @@ playButton.addEventListener("click", function() {
         const loopA = new Tone.Loop(time => {
             updateStateMachine();
             console.log(time);
-            console.log(typeof(noteToPlay))
-            synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+            if (noteToPlay === "") {
+                console.log("no note")
+            }
+            else {
+                synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+            }
         }, "4n").start(0);
         first = false;
     }
@@ -91,14 +105,11 @@ playButton.addEventListener("click", function() {
     else {
         Tone.Transport.stop();
         playButton.innerText = "Play Music!"
+        reset();
     }
 });
 
-var currentState = 0
-let noteToPlay = ""
-let rhythm = ""
-var buttonPress = false
-function pressed() {buttonPress = true;}
+
 
 
 
