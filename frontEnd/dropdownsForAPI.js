@@ -4,8 +4,9 @@ function callSynth(id) {
     if(prevSynthesized)
         prevSynthesized.remove();
     currentState = 0
-    noteToPlay = ""
+    noteToPlay = "G4"
     rhythm = "8n"
+    buttonPress = false
 
     //switch between interfaces
     if (id==0){
@@ -77,6 +78,7 @@ playButton.addEventListener("click", function() {
         const loopA = new Tone.Loop(time => {
             updateStateMachine();
             console.log(time);
+            console.log(typeof(noteToPlay))
             synthA.triggerAttackRelease(noteToPlay, rhythm, time);
         }, "4n").start(0);
         first = false;
@@ -95,3 +97,8 @@ playButton.addEventListener("click", function() {
 var currentState = 0
 let noteToPlay = ""
 let rhythm = ""
+var buttonPress = false
+function pressed() {buttonPress = true;}
+
+
+
