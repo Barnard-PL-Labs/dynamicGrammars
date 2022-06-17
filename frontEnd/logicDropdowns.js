@@ -23,7 +23,6 @@ async function loadGrammar() {
         let right = rule[1].split(" | ").map(v => v.trim())
         ruleMap.set(left, right)
     });
-
 }
 loadGrammar();
 
@@ -76,7 +75,6 @@ function genDropdown(k) {
         option.text = option.value = elem;
         select.add(option, 0);
     })
-
     select.selectedIndex = -1;
     return select;
 }
@@ -94,18 +92,32 @@ function onchangeListener(event) {
         //expects rule components to be space seperated
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
+            //more hacky overloading solution
+            if (this.value === "E4" || this.value === "G4" || this.value === "eigthnote"
+                || this.value === "halfnote") {
+                replacementVal.innerHTML = " " + this.value + " ";
+            }
             //deal with spacing here
-            replacementVal.innerHTML = " " + e.slice(1, -1) + " ";
-            Array.from(ruleMap.keys()).forEach(g => {
-                if (g == e) {
-                    replacementVal = genDropdown(g);
-                }
-            })
+            else {
+                replacementVal.innerHTML = " " + e.slice(1, -1) + " ";
+                Array.from(ruleMap.keys()).forEach(g => {
+                    if (g == e) {
+                        replacementVal = genDropdown(g);
+                    }
+                })
+            }
             return replacementVal;
         })
 
         if (newDropdowns.length > 1) {
             newDropdowns = addParens(newDropdowns);
+        }
+
+        if (newDropdowns[0].innerText === " noteToPlay "){
+            changeDropdown("note")
+        }
+        else if(newDropdowns[0].innerText === " rhythm ") {
+            changeDropdown("rhythm")
         }
 
         newDropdowns.forEach(elem => {
@@ -114,6 +126,19 @@ function onchangeListener(event) {
 
     }
     this.remove();
+}
+
+//super hacky way to solve function overloading problem
+function changeDropdown(fxn) {
+    let nextDrop = event.target.nextSibling.nextSibling
+    if (fxn === "note") {
+        nextDrop[0].value = nextDrop[0].text = "E4";
+        nextDrop[1].value = nextDrop[1].text = "G4";
+    }
+    else{
+        nextDrop[0].value = nextDrop[0].text = "eigthnote";
+        nextDrop[1].value = nextDrop[1].text = "halfnote";
+    }
 }
 
 function addParens(ds) {
