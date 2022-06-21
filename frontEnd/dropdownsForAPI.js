@@ -53,6 +53,8 @@ function toTE() {
     editorNum = 1;
 }
 
+
+
 function toSE() {
     document.getElementsByClassName('TE')[0].
         style.display = 'none';
@@ -76,6 +78,9 @@ function reset() {
 }
 
 function pressed() {buttonPress = true;}
+// Button toggles false if user clicks on it again
+function released() {buttonPress = false;}
+
 
 //template
 var first = true;

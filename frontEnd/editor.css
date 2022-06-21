@@ -25,6 +25,14 @@ h1 {text-align: center}
     padding-right: 20px;
 }
 
+.btnPRESSED {
+    background:rgb(243, 0, 0);
+}
+
+.btnOFF {
+   background:rgb(0, 208, 3); 
+}
+
 .scroll {
     overflow: auto;
     width: 100%;
