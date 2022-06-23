@@ -1,5 +1,6 @@
 var currentState = 0
 let noteToPlay = ""
+let audioSample = ""
 let rhythm = "8n"
 var buttonPress = false
 
@@ -33,8 +34,10 @@ function callSynth(id) {
                 //gotta change this at some point!
                 temp = temp.replaceAll("G4", "\"G4\"")
                 temp = temp.replaceAll("E4", "\"E4\"")
+                temp = temp.replaceAll("C4", "\"C4\"")
                 temp = temp.replaceAll("eigthnote", "\"8n\"")
                 temp = temp.replaceAll("halfnote", "\"2n\"")
+                temp = temp.replaceAll("quarternote", "\"4n\"")
                 script.text = temp;
                 script.setAttribute("id", "synth_script");
                 document.body.appendChild(script);
@@ -78,6 +81,7 @@ function extractContent (assumeBody, guaranteeBody) {
 function reset() {
     currentState = 0
     noteToPlay = ""
+    audioSample = ""
     rhythm = "8n"
     buttonPress = false
 }
@@ -98,8 +102,8 @@ playButton.addEventListener("click", function() {
         const loopA = new Tone.Loop(time => {
             updateStateMachine();
             console.log(time);
-            if (noteToPlay === "") {
-                console.log("no note")
+            if (noteToPlay === "" || audioSample === "") {
+                console.log("no note or sample")
             }
             else {
                 synthA.triggerAttackRelease(noteToPlay, rhythm, time);

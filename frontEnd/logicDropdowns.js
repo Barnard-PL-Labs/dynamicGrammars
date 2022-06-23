@@ -93,8 +93,9 @@ function onchangeListener(event) {
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
             //more hacky overloading solution
-            if (this.value === "E4" || this.value === "G4" || this.value === "eigthnote"
-                || this.value === "halfnote") {
+            if (this.value === "E4" || this.value === "G4" || this.value === "C4" || 
+            this.value === "eigthnote" || this.value === "halfnote" || this.value === "quarternote" ||
+            this.value ==="HiHat" || this.value === "Snare" || this.value === "Kick") {
                 replacementVal.innerHTML = " " + this.value + " ";
             }
             //deal with spacing here
@@ -119,7 +120,9 @@ function onchangeListener(event) {
         else if(newDropdowns[0].innerText === " rhythm ") {
             changeDropdown("rhythm")
         }
-
+        else if(newDropdowns[0].innerText === " audioSample ") {
+            changeDropdown("audio")
+        }
         newDropdowns.forEach(elem => {
             event.target.parentNode.insertBefore(elem, this);
         });
@@ -134,10 +137,17 @@ function changeDropdown(fxn) {
     if (fxn === "note") {
         nextDrop[0].value = nextDrop[0].text = "E4";
         nextDrop[1].value = nextDrop[1].text = "G4";
+        nextDrop[2].value = nextDrop[2].text = "C4";
     }
-    else{
+    else if (fxn === "rhythm") {
         nextDrop[0].value = nextDrop[0].text = "eigthnote";
         nextDrop[1].value = nextDrop[1].text = "halfnote";
+        nextDrop[2].value = nextDrop[2].text = "quarternote";
+    }
+    else if (fxn === "audio") {
+        nextDrop[0].value = nextDrop[0].text = "HiHat";
+        nextDrop[1].value = nextDrop[1].text = "Snare";
+        nextDrop[2].value = nextDrop[2].text = "Kick";
     }
 }
 
