@@ -53,7 +53,12 @@ function toTE() {
     editorNum = 1;
 }
 
-
+function playAudio(newSound)
+{
+    console.log(newSound);
+    const player = new Tone.Player("./vocal_cymantics/" + newSound + ".wav").toDestination();
+    player.autostart = true;
+}
 
 function toSE() {
     document.getElementsByClassName('TE')[0].

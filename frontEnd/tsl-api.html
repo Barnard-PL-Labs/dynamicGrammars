@@ -24,12 +24,14 @@
         <main>
             <button type="submit" onclick="callSynth(editorNum)">Run Synthesis</button>
             <select id="targetLang" aria-label="target language">
+                <optgroup label="Target Language">
                 <option value="js">javascript</option>
                 <option value="python">python</option>
                 <option value="xstate">xstate</option>
+            </optgroup>
             </select>
             <button id="play-button" style="background-color:lightskyblue">Play Music!</button>
-            <input type="button" name="Button Toggle" value="Button Toggle" id="select" onclick="colorchange('select')" class="btnPRESSED" />
+            <input type="button" name="Button Toggle" value="Button Off" id="select" onclick="colorchange('select')" class="btnPRESSED" />
                     <script>
                         function colorchange(id)
                     {
@@ -38,9 +40,11 @@
                     if(currentClass == 'btnPRESSED')
                     {
                         el.setAttribute("class", "btnOFF");
+                        el.value = "Button On";
                         pressed();
                     } else {
                         el.setAttribute("class", "btnPRESSED");
+                        el.value = "Button Off";
                         released();
                     }
                     }
@@ -86,6 +90,21 @@
         <textarea id="codeBox" rows="10" spellcheck="false" style="width:100%;height:300px;padding:10px"></textarea>
     </div>
     </div>
+    <div class="row">
+
+              <h2 id="audio">Audio Samples:</h2>
+                <div class="column">
+                <p>
+              <button class="button-52"  onclick="playAudio('hihat');">HiHat</button>
+                <button class="button-52"  onclick="playAudio('snare');">Snare</button>
+                <button class="button-52"  onclick="playAudio('kick');">Kick</button>
+                <button class="button-52"  onclick="playAudio('tom1');">Tom1</button>
+                <button class="button-52"  onclick="playAudio('tom2');">Tom2</button>
+                <button class="button-52"  onclick="playAudio('tom3');">Tom3</button>
+                </p>
+                </div>
+    </div>
+
 
     <script>grammarFile = "../grammarDef/tsl_musicGrammar.ne"</script>
     <script src="dropdownsForAPI.js"></script>
