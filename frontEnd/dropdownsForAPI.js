@@ -46,6 +46,8 @@ function callSynth(id) {
         .catch(error => console.error(error));
 }
 
+// switch to the text editor
+// update the text editor content when changed from structured editor to text editor
 function toTE() {
     document.getElementById('specBox').innerHTML = delDel(extractContent(document.getElementById("assume").innerText,
         document.getElementById("guarantee").innerText));
@@ -53,6 +55,7 @@ function toTE() {
         style.display = 'none';
     document.getElementsByClassName('TE')[0].
         style.display = 'initial';
+    // editorNum = 1 for text editor
     editorNum = 1;
 }
 
@@ -63,11 +66,13 @@ function playAudio(newSound)
     player.autostart = true;
 }
 
+// switch to the structured editor
 function toSE() {
     document.getElementsByClassName('TE')[0].
         style.display = 'none';
     document.getElementsByClassName('SE')[0].
         style.display = 'initial';
+    // editorNum = 0 for structure editor
     editorNum = 0;
 }
 
