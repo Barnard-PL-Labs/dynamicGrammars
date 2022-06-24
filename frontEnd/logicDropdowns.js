@@ -76,6 +76,14 @@ function genDropdown(k) {
         select.add(option, 0);
     })
     select.selectedIndex = -1;
+
+    //implements auto-expanding dropdowns
+    $(select).hover(function() {
+        $(this).attr('size', ruleMap.get(k).length);
+      }, function() {    
+        $(this).attr('size', 1);
+        $(this).prop('selectedIndex', -1);
+      });
     return select;
 }
 
@@ -92,36 +100,18 @@ function onchangeListener(event) {
         //expects rule components to be space seperated
         let newDropdowns = this.value.split(" ").map(e => {
             let replacementVal = document.createElement('span');
-            //more hacky overloading solution
-            if (this.value === "E4" || this.value === "G4" || this.value === "C4" || 
-            this.value === "eigthnote" || this.value === "halfnote" || this.value === "quarternote" ||
-            this.value ==="HiHat" || this.value === "Snare" || this.value === "Kick") {
-                replacementVal.innerHTML = " " + this.value + " ";
-            }
             //deal with spacing here
-            else {
-                replacementVal.innerHTML = " " + e.slice(1, -1) + " ";
-                Array.from(ruleMap.keys()).forEach(g => {
-                    if (g == e) {
-                        replacementVal = genDropdown(g);
-                    }
-                })
-            }
+            replacementVal.innerHTML = " " + e.slice(1, -1) + " ";
+            Array.from(ruleMap.keys()).forEach(g => {
+                if (g == e) {
+                    replacementVal = genDropdown(g);
+                }
+            })
             return replacementVal;
         })
 
         if (newDropdowns.length > 1) {
             newDropdowns = addParens(newDropdowns);
-        }
-
-        if (newDropdowns[0].innerText === " noteToPlay "){
-            changeDropdown("note")
-        }
-        else if(newDropdowns[0].innerText === " rhythm ") {
-            changeDropdown("rhythm")
-        }
-        else if(newDropdowns[0].innerText === " audioSample ") {
-            changeDropdown("audio")
         }
         newDropdowns.forEach(elem => {
             event.target.parentNode.insertBefore(elem, this);
@@ -129,26 +119,6 @@ function onchangeListener(event) {
 
     }
     this.remove();
-}
-
-//super hacky way to solve function overloading problem
-function changeDropdown(fxn) {
-    let nextDrop = event.target.nextSibling.nextSibling
-    if (fxn === "note") {
-        nextDrop[0].value = nextDrop[0].text = "E4";
-        nextDrop[1].value = nextDrop[1].text = "G4";
-        nextDrop[2].value = nextDrop[2].text = "C4";
-    }
-    else if (fxn === "rhythm") {
-        nextDrop[0].value = nextDrop[0].text = "eigthnote";
-        nextDrop[1].value = nextDrop[1].text = "halfnote";
-        nextDrop[2].value = nextDrop[2].text = "quarternote";
-    }
-    else if (fxn === "audio") {
-        nextDrop[0].value = nextDrop[0].text = "HiHat";
-        nextDrop[1].value = nextDrop[1].text = "Snare";
-        nextDrop[2].value = nextDrop[2].text = "Kick";
-    }
 }
 
 function addParens(ds) {
@@ -195,3 +165,7 @@ addButton2.innerHTML = "+";
 addButton2.onclick = function() {
     createSelector(0);
 }
+
+
+
+  

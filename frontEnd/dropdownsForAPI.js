@@ -35,6 +35,8 @@ function callSynth(id) {
                 temp = temp.replaceAll("G4", "\"G4\"")
                 temp = temp.replaceAll("E4", "\"E4\"")
                 temp = temp.replaceAll("C4", "\"C4\"")
+                temp = temp.replaceAll("hihat", "\"hihat\"")
+                temp = temp.replaceAll("snare", "\"snare\"")
                 temp = temp.replaceAll("eigthnote", "\"8n\"")
                 temp = temp.replaceAll("halfnote", "\"2n\"")
                 temp = temp.replaceAll("quarternote", "\"4n\"")
@@ -90,6 +92,11 @@ function pressed() {buttonPress = true;}
 // Button toggles false if user clicks on it again
 function released() {buttonPress = false;}
 
+const snare = new Tone.Player("./vocal_cymantics/" + "snare" + ".wav").toDestination();
+snare.loop = false;
+const hihat = new Tone.Player("./vocal_cymantics/" + "hihat" + ".wav").toDestination();
+hihat.loop = false;
+samplePlayers = {"snare": snare, "hihat": hihat};
 
 //template
 var first = true;
@@ -101,12 +108,11 @@ playButton.addEventListener("click", function() {
         //play a note every quarter-note
         const loopA = new Tone.Loop(time => {
             updateStateMachine();
-            console.log(time);
-            if (noteToPlay === "" || audioSample === "") {
-                console.log("no note or sample")
+            if (noteToPlay == "E4" || noteToPlay == "G4") {
+                synthA.triggerAttackRelease(noteToPlay, rhythm, time);
             }
             else {
-                synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+                samplePlayers[noteToPlay].start().stop("+16n");
             }
         }, "4n").start(0);
         first = false;
