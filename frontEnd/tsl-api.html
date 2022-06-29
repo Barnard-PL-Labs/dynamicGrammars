@@ -8,6 +8,8 @@
     <meta name="generator" content="Hugo 0.88.1">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/tone"></script>
+    <!-- Link dropdownsForAPI.js -->
+    <script src="js/dropdownsForAPI.js"></script>
     <title>dynamicGrammars</title>
     <link href="editor.css" rel="stylesheet">
 </head>
@@ -49,7 +51,18 @@
                     }
                     }
                     </script>
+             <div class="range"></div>
+                <label for="vol">Current Loop Speed: <div id="sliderAmount">6</div></label>
+                <input id ="slide" type="range" min="2" max="8" step = "2" class="slider" onchange="updateSlider(this.value)">
+                <div class="sliderticks">
+                  <p>2</p>
+                  <p>4</p>
+                  <p>6</p>
+                  <p>8</p>
+                </div>
+              </div>
         </main>
+       
     </div>
     <div class="row" style="padding: 10px;margin-left: -23px;">
     <div id="tslEditor" class="column SE">
@@ -90,8 +103,8 @@
         <textarea id="codeBox" rows="10" spellcheck="false" style="width:100%;height:300px;padding:10px"></textarea>
     </div>
     </div>
+    
     <div class="row">
-
               <h2 id="audio">Audio Samples:</h2>
                 <div class="column">
                 <p>

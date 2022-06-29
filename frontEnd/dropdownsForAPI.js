@@ -110,16 +110,29 @@ playButton.addEventListener("click", function() {
     if (first) {
         playButton.innerText = "Pause Music!"
         const synthA = new Tone.Synth().toDestination();
-        //play a note every quarter-note
+        var sliderDiv = document.getElementById("sliderAmount");
+        var loopSpeed = sliderDiv.innerHTML;
+        console.log("Loop speed original: " + loopSpeed);
         const loopA = new Tone.Loop(time => {
             updateStateMachine();
-            if (noteToPlay == "E4" || noteToPlay == "G4") {
-                synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+            sliderDiv = document.getElementById("sliderAmount");
+            console.log("sliderDiv: " + sliderDiv.innerHTML);
+            console.log("loopSpeed: " + loopSpeed);
+            if (sliderDiv.innerHTML == loopSpeed) {
+                if (noteToPlay == "E4" || noteToPlay == "G4") {
+                    synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+                }
+                else {
+                    samplePlayers[noteToPlay].start().stop("+16n");
+                }
             }
-            else {
-                samplePlayers[noteToPlay].start().stop("+16n");
+            else
+            {
+                loopSpeed = sliderDiv.innerHTML;
+                loopA.interval = loopSpeed + "n";
+                loopA.start(0);
             }
-        }, "4n").start(0);
+        }, loopSpeed + "n").start(0);
         first = false;
     }
     if (Tone.Transport.state !== 'started') {
@@ -133,6 +146,13 @@ playButton.addEventListener("click", function() {
         reset();
     }
 });
+
+
+function updateSlider(slideAmount) {
+    var sliderDiv = document.getElementById("sliderAmount");
+    sliderDiv.innerHTML = slideAmount;
+}
+
 
 
 
