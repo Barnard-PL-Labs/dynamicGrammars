@@ -1,7 +1,7 @@
 var currentState = 0
 let noteToPlay = ""
-let audioSample = ""
 let rhythm = "8n"
+var randomNum;
 var buttonPress = false
 
 function callSynth(id) {
@@ -88,7 +88,6 @@ function extractContent (assumeBody, guaranteeBody) {
 function reset() {
     currentState = 0
     noteToPlay = ""
-    audioSample = ""
     rhythm = "8n"
     buttonPress = false
 }
@@ -103,9 +102,11 @@ const hihat = new Tone.Player("./vocal_cymantics/" + "hihat" + ".wav").toDestina
 hihat.loop = false;
 samplePlayers = {"snare": snare, "hihat": hihat};
 
+
 //template
 var first = true;
 let playButton = document.getElementById("play-button")
+var rev = document.getElementById('reverseToggle');
 playButton.addEventListener("click", function() {
     if (first) {
         playButton.innerText = "Pause Music!"
@@ -116,14 +117,31 @@ playButton.addEventListener("click", function() {
         const loopA = new Tone.Loop(time => {
             updateStateMachine();
             sliderDiv = document.getElementById("sliderAmount");
-            console.log("sliderDiv: " + sliderDiv.innerHTML);
-            console.log("loopSpeed: " + loopSpeed);
             if (sliderDiv.innerHTML == loopSpeed) {
                 if (noteToPlay == "E4" || noteToPlay == "G4") {
-                    synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+                    if (randomNum < 4 && randomNum > 1) {
+                        var el = randomNum / 10;
+                        console.log("JCReverb");
+                        const reverb = new Tone.JCReverb(el).toDestination();
+                        const delay = new Tone.FeedbackDelay(el+0.2).toDestination();
+                        const synth = new Tone.DuoSynth().chain(delay, reverb);
+                        synth.triggerAttackRelease(noteToPlay, rhythm);
+                    }
+                    else if (randomNum >= 4 && randomNum <= 8){
+                        console.log("AutoWah");
+                        const autoWah = new Tone.AutoWah(50, 6, -30).toDestination();
+                        const synth = new Tone.Synth().connect(autoWah);
+                        autoWah.Q.value = (randomNum + 1);
+                        console.log(autoWah.Q.value);
+                        synth.triggerAttackRelease(noteToPlay, rhythm);
+                    }
+                    else{
+                        synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+                    }
+                    
                 }
                 else {
-                    samplePlayers[noteToPlay].start().stop("+16n");
+                        samplePlayers[noteToPlay].start().stop("+16n");
                 }
             }
             else
@@ -153,7 +171,26 @@ function updateSlider(slideAmount) {
     sliderDiv.innerHTML = slideAmount;
 }
 
+function colorchange(){
+    var currentClass = rev.getAttribute("class");
+    if(currentClass == 'btnPRESSED')
+    {
+        rev.setAttribute("class", "btnOFF");
+        rev.value = "Reverse On";
+        console.log(rev.value);
+        pressed();
+    } else {
+        rev.setAttribute("class", "btnPRESSED");
+        rev.value = "Reverse Off";
+        console.log(rev.value);
+        released();
+    }
+}
 
+function randomNumber() {
+    randomNum = Math.floor(Math.random() * 10) + 1;
+    console.log(randomNum);
+}
 
 
 

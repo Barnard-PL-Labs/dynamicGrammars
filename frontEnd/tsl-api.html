@@ -33,24 +33,21 @@
             </optgroup>
             </select>
             <button id="play-button" style="background-color:lightskyblue">Play Music!</button>
-            <input type="button" name="Button Toggle" value="Button Off" id="select" onclick="colorchange('select')" class="btnPRESSED" />
-                    <script>
-                        function colorchange(id)
-                    {
-                    var el = document.getElementById(id);
-                    var currentClass = el.getAttribute("class");
-                    if(currentClass == 'btnPRESSED')
-                    {
-                        el.setAttribute("class", "btnOFF");
-                        el.value = "Button On";
-                        pressed();
-                    } else {
-                        el.setAttribute("class", "btnPRESSED");
-                        el.value = "Button Off";
-                        released();
-                    }
-                    }
-                    </script>
+            <button id="button-press" style="background-color:red">Button Press</button>
+            <script>
+                document.getElementById("button-press").onmousedown = function() {
+                    this.style.backgroundColor = "lightgreen";
+                    pressed();
+                    
+
+                };
+                document.getElementById("button-press").onmouseup = function() {
+                    this.style.backgroundColor = "red";
+                    released();
+                };
+            </script>
+            <!--<input type="button" name="Reverse Toggle" value="Reverse Off" id="reverseToggle" onmousedown="colorchange()" class="btnPRESSED" />-->
+            <button id="random-button" style="background-color:orange" onclick=randomNumber()>Random Effect</button>
              <div class="range"></div>
                 <label for="vol">Current Loop Speed: <div id="sliderAmount">6</div></label>
                 <input id ="slide" type="range" min="2" max="8" step = "2" class="slider" onchange="updateSlider(this.value)">
@@ -61,6 +58,7 @@
                   <p>8</p>
                 </div>
               </div>
+            
         </main>
        
     </div>
