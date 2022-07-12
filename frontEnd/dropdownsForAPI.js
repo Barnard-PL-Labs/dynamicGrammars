@@ -2,10 +2,10 @@ var currentState = 0
 let noteToPlay = ""
 let rhythm = "8n"
 let effect = ""
-let tempoSpeed = "4n"
+let rand = 0;
+let tempoSpeed = "8Times"
 var randomNum;
 var buttonPress = false
-var rand = false
 
 const callSynth = id => {
     //reset updateStateMachine() after every synthesis
@@ -37,9 +37,9 @@ const callSynth = id => {
                 //gotta change this at some point!
                 temp = temp.replaceAll("G4", "\"G4\"")
                 temp = temp.replaceAll("E4", "\"E4\"")
-                temp = temp.replaceAll("2n", "\"2n\"")
-                temp = temp.replaceAll("4n", "\"4n\"")
-                temp = temp.replaceAll("8n", "\"8n\"")
+                temp = temp.replaceAll("2Times", "\"2Times\"")
+                temp = temp.replaceAll("4Times", "\"4Times\"")
+                temp = temp.replaceAll("8Times", "\"8Times\"")
                 temp = temp.replaceAll("None", "\"None\"")
                 temp = temp.replaceAll("Wah", "\"Wah\"")
                 temp = temp.replaceAll("Reverb", "\"Reverb\"")
@@ -97,10 +97,9 @@ const reset = () => {
     currentState = 0
     noteToPlay = ""
     effect = ""
-    tempoSpeed = "4n"
+    tempoSpeed = "8Times"
     rhythm = "8n"
     buttonPress = false
-    rand = false
 };
 
 const pressed = () => {buttonPress = true;};
@@ -130,37 +129,30 @@ playButton.addEventListener("click", function() {
         playButton.innerText = "Pause Music!"
         const synthA = new Tone.Synth().toDestination();
         var sliderDiv = document.getElementById("sliderAmount");
-        var loopSpeed = sliderDiv.innerHTML;
+        // loopSpeed is the first digit of "tempoSpeed" + "n"
+        var loopSpeed = tempoSpeed.substring(0, 1) + "n";
         console.log("Loop speed original: " + loopSpeed);
         const loopA = new Tone.Loop(time => {
+            rand = genRandom(Math.random(), 1, 5);
+            console.log("Random Generated is: " + rand);
             updateStateMachine();
             console.log("EFFECT: " + effect);
             sliderDiv = document.getElementById("sliderAmount");
-            if (sliderDiv.innerHTML == loopSpeed) {
-                if (noteToPlay == "E4" || noteToPlay == "G4") {
-                    if (effect == "Reverb") {
-                        synth.triggerAttackRelease(noteToPlay, rhythm);
-                    }
-                    else if (effect == "Wah") {
-
-                        synthWah.triggerAttackRelease(noteToPlay, rhythm);
-                    }
-                    else{
-                        synthA.triggerAttackRelease(noteToPlay, rhythm, time);
-                    }
-                    
+            if (noteToPlay == "E4" || noteToPlay == "G4") {
+                if (effect == "Reverb") {
+                    synth.triggerAttackRelease(noteToPlay, rhythm);
                 }
-                else {
-                        samplePlayers[noteToPlay].start().stop("+16n");
+                else if (effect == "Wah") {
+                    synthWah.triggerAttackRelease(noteToPlay, rhythm);
+                }
+                else{
+                    synthA.triggerAttackRelease(noteToPlay, rhythm, time);
                 }
             }
-            else
-            {
-                loopSpeed = sliderDiv.innerHTML;
-                loopA.interval = loopSpeed + "n";
-                loopA.start(0);
+            else {
+                    samplePlayers[noteToPlay].start().stop("+16n");
             }
-        }, tempoSpeed).start(0);
+        }, loopSpeed).start(0);
         first = false;
     }
     if (Tone.Transport.state !== 'started') {
@@ -197,10 +189,21 @@ const colorchange = () => {
     }
 };
 
-const randomNumber = () => {
-    randomNum = Math.floor(Math.random() * 10) + 1;
-    console.log(randomNum);
-};
+
+function greaterThan3(input) {
+    return input > 3;
+}
+
+function lessThan3(input) {
+    return input < 3;
+}
+
+function genRandom(random, min, max) {
+    return random * (max - min) + min;
+}
+
+
+
 
 
 
