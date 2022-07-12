@@ -8,6 +8,6 @@ sig_out ->  "noteToPlay" | "rhythm" | "effect" | "tempoSpeed"
 note -> "E4" | "G4" | "hihat" | "snare" 
 rhyth -> "eigthnote" | "halfnote" | "quarternote"
 eff -> "None" | "Wah" | "Reverb"
-speed -> "2Times" | "4Times" | "8Times" 
+speed -> "Times2" | "Times4" | "Times8" 
 
 

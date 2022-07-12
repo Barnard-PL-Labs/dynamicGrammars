@@ -3,9 +3,9 @@ let noteToPlay = ""
 let rhythm = "8n"
 let effect = ""
 let rand = 0;
-let tempoSpeed = "8Times"
-var randomNum;
+let tempoSpeed = "Times4"
 var buttonPress = false
+
 
 const callSynth = id => {
     //reset updateStateMachine() after every synthesis
@@ -37,9 +37,9 @@ const callSynth = id => {
                 //gotta change this at some point!
                 temp = temp.replaceAll("G4", "\"G4\"")
                 temp = temp.replaceAll("E4", "\"E4\"")
-                temp = temp.replaceAll("2Times", "\"2Times\"")
-                temp = temp.replaceAll("4Times", "\"4Times\"")
-                temp = temp.replaceAll("8Times", "\"8Times\"")
+                temp = temp.replaceAll("Times2", "\"Times2\"")
+                temp = temp.replaceAll("Times4", "\"Times4\"")
+                temp = temp.replaceAll("Times8", "\"Times8\"")
                 temp = temp.replaceAll("None", "\"None\"")
                 temp = temp.replaceAll("Wah", "\"Wah\"")
                 temp = temp.replaceAll("Reverb", "\"Reverb\"")
@@ -97,7 +97,7 @@ const reset = () => {
     currentState = 0
     noteToPlay = ""
     effect = ""
-    tempoSpeed = "8Times"
+    tempoSpeed = "Times4"
     rhythm = "8n"
     buttonPress = false
 };
@@ -129,29 +129,41 @@ playButton.addEventListener("click", function() {
         playButton.innerText = "Pause Music!"
         const synthA = new Tone.Synth().toDestination();
         var sliderDiv = document.getElementById("sliderAmount");
-        // loopSpeed is the first digit of "tempoSpeed" + "n"
-        var loopSpeed = tempoSpeed.substring(0, 1) + "n";
+        // loopSpeed is the last digit of "tempoSpeed" + "n"
+        console.log("Tempo Speed: " + tempoSpeed);
+        var loopSpeed = tempoSpeed.substring(tempoSpeed.length - 1) + "n";
+        console.log(loopSpeed); 
         console.log("Loop speed original: " + loopSpeed);
         const loopA = new Tone.Loop(time => {
             rand = genRandom(Math.random(), 1, 5);
             console.log("Random Generated is: " + rand);
             updateStateMachine();
-            console.log("EFFECT: " + effect);
-            sliderDiv = document.getElementById("sliderAmount");
-            if (noteToPlay == "E4" || noteToPlay == "G4") {
-                if (effect == "Reverb") {
-                    synth.triggerAttackRelease(noteToPlay, rhythm);
+            // loopSpeed is the last digit of "tempoSpeed" + "n"
+            if (loopSpeed == tempoSpeed.substring(tempoSpeed.length - 1) + "n")
+            {
+                console.log("Note Played Success: " + noteToPlay);
+                 if (noteToPlay == "E4" || noteToPlay == "G4") {
+                    if (effect == "Reverb") {
+                        synth.triggerAttackRelease(noteToPlay, rhythm);
+                    }
+                    else if (effect == "Wah") {
+                        synthWah.triggerAttackRelease(noteToPlay, rhythm);
+                    }
+                    else{
+                        synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+                    }
                 }
-                else if (effect == "Wah") {
-                    synthWah.triggerAttackRelease(noteToPlay, rhythm);
-                }
-                else{
-                    synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+                else {
+                        samplePlayers[noteToPlay].start().stop("+16n");
                 }
             }
-            else {
-                    samplePlayers[noteToPlay].start().stop("+16n");
+            else{
+                console.log("Note Played Fail: " + noteToPlay);
+                loopSpeed = tempoSpeed.substring(tempoSpeed.length - 1) + "n";
+                loopA.interval = loopSpeed;
+                loopA.start(0);
             }
+           
         }, loopSpeed).start(0);
         first = false;
     }
