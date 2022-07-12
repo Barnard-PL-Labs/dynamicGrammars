@@ -1,10 +1,13 @@
 var currentState = 0
 let noteToPlay = ""
-let audioSample = ""
 let rhythm = "8n"
+let effect = ""
+let rand = 0;
+let tempoSpeed = "8Times"
+var randomNum;
 var buttonPress = false
 
-function callSynth(id) {
+const callSynth = id => {
     //reset updateStateMachine() after every synthesis
     let prevSynthesized = document.getElementById("synth_script");
     if(prevSynthesized) {
@@ -12,14 +15,15 @@ function callSynth(id) {
     }
     reset();
     //switch between interfaces
-    if (id==0){
+    if (id == 0) {
+        debugger;
+    } else if (id==1){
+        // text editor
+        tslSpec = document.getElementById("specBox").value;
+    } else {
         // structured editor
         tslSpec = delDel(extractContent(document.getElementById("assume").innerText,
             document.getElementById("guarantee").innerText));
-    }
-    else if (id==1){
-        // text editor
-        tslSpec = document.getElementById("specBox").value;
     }
     tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
     targetLang = document.getElementById("targetLang").value;
@@ -27,14 +31,18 @@ function callSynth(id) {
         .then(response => {
             response.text().then(function(text) {
                 document.getElementById("codeBox").value = text;
-
                 //append generated script code to client side
                 let script = document.createElement("script");
                 let temp = "function updateStateMachine(){\n" + text + "}"
                 //gotta change this at some point!
                 temp = temp.replaceAll("G4", "\"G4\"")
                 temp = temp.replaceAll("E4", "\"E4\"")
-                temp = temp.replaceAll("C4", "\"C4\"")
+                temp = temp.replaceAll("2Times", "\"2Times\"")
+                temp = temp.replaceAll("4Times", "\"4Times\"")
+                temp = temp.replaceAll("8Times", "\"8Times\"")
+                temp = temp.replaceAll("None", "\"None\"")
+                temp = temp.replaceAll("Wah", "\"Wah\"")
+                temp = temp.replaceAll("Reverb", "\"Reverb\"")
                 temp = temp.replaceAll("hihat", "\"hihat\"")
                 temp = temp.replaceAll("snare", "\"snare\"")
                 temp = temp.replaceAll("eigthnote", "\"8n\"")
@@ -46,11 +54,11 @@ function callSynth(id) {
             });
         })
         .catch(error => console.error(error));
-}
+};
 
 // switch to the text editor
 // update the text editor content when changed from structured editor to text editor
-function toTE() {
+const toTE = () => {
     document.getElementById('specBox').innerHTML = delDel(extractContent(document.getElementById("assume").innerText,
         document.getElementById("guarantee").innerText));
     document.getElementsByClassName('SE')[0].
@@ -59,7 +67,7 @@ function toTE() {
         style.display = 'initial';
     // editorNum = 1 for text editor
     editorNum = 1;
-}
+};
 
 function playAudio(newSound)
 {
@@ -69,33 +77,35 @@ function playAudio(newSound)
 }
 
 // switch to the structured editor
-function toSE() {
+const toSE = () => {
     document.getElementsByClassName('TE')[0].
         style.display = 'none';
     document.getElementsByClassName('SE')[0].
         style.display = 'initial';
     // editorNum = 0 for structure editor
     editorNum = 0;
-}
+};
 
-function extractContent (assumeBody, guaranteeBody) {
+const extractContent = (assumeBody, guaranteeBody) => {
     let htmlBody = assumeBody + '\n' + guaranteeBody;
     const logicText = document.createElement('span')
     logicText.innerHTML = htmlBody;
     return logicText.innerText;
-}
+};
 
-function reset() {
+const reset = () => {
     currentState = 0
     noteToPlay = ""
-    audioSample = ""
+    effect = ""
+    tempoSpeed = "8Times"
     rhythm = "8n"
     buttonPress = false
-}
+};
 
-function pressed() {buttonPress = true;}
+const pressed = () => {buttonPress = true;};
+
 // Button toggles false if user clicks on it again
-function released() {buttonPress = false;}
+const released = () => {buttonPress = false;};
 
 const snare = new Tone.Player("./vocal_cymantics/" + "snare" + ".wav").toDestination();
 snare.loop = false;
@@ -103,23 +113,46 @@ const hihat = new Tone.Player("./vocal_cymantics/" + "hihat" + ".wav").toDestina
 hihat.loop = false;
 samplePlayers = {"snare": snare, "hihat": hihat};
 
+const reverb = new Tone.JCReverb(0.3).toDestination();
+const delay = new Tone.FeedbackDelay(0+0.2).toDestination();
+const synth = new Tone.DuoSynth().chain(delay, reverb);
+
+const autoWah = new Tone.AutoWah(50, 6, -30).toDestination();
+const synthWah = new Tone.Synth().connect(autoWah);
+autoWah.Q.value = (1.1);
 //template
 var first = true;
 let playButton = document.getElementById("play-button")
+var rev = document.getElementById('reverseToggle');
 playButton.addEventListener("click", function() {
     if (first) {
         playButton.innerText = "Pause Music!"
         const synthA = new Tone.Synth().toDestination();
-        //play a note every quarter-note
+        var sliderDiv = document.getElementById("sliderAmount");
+        // loopSpeed is the first digit of "tempoSpeed" + "n"
+        var loopSpeed = tempoSpeed.substring(0, 1) + "n";
+        console.log("Loop speed original: " + loopSpeed);
         const loopA = new Tone.Loop(time => {
+            rand = genRandom(Math.random(), 1, 5);
+            console.log("Random Generated is: " + rand);
             updateStateMachine();
+            console.log("EFFECT: " + effect);
+            sliderDiv = document.getElementById("sliderAmount");
             if (noteToPlay == "E4" || noteToPlay == "G4") {
-                synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+                if (effect == "Reverb") {
+                    synth.triggerAttackRelease(noteToPlay, rhythm);
+                }
+                else if (effect == "Wah") {
+                    synthWah.triggerAttackRelease(noteToPlay, rhythm);
+                }
+                else{
+                    synthA.triggerAttackRelease(noteToPlay, rhythm, time);
+                }
             }
             else {
-                samplePlayers[noteToPlay].start().stop("+16n");
+                    samplePlayers[noteToPlay].start().stop("+16n");
             }
-        }, "4n").start(0);
+        }, loopSpeed).start(0);
         first = false;
     }
     if (Tone.Transport.state !== 'started') {
@@ -133,6 +166,43 @@ playButton.addEventListener("click", function() {
         reset();
     }
 });
+
+
+const updateSlider = slideAmount => {
+    var sliderDiv = document.getElementById("sliderAmount");
+    sliderDiv.innerHTML = slideAmount;
+};
+
+const colorchange = () => {
+    var currentClass = rev.getAttribute("class");
+    if(currentClass == 'btnPRESSED')
+    {
+        rev.setAttribute("class", "btnOFF");
+        rev.value = "Reverse On";
+        console.log(rev.value);
+        pressed();
+    } else {
+        rev.setAttribute("class", "btnPRESSED");
+        rev.value = "Reverse Off";
+        console.log(rev.value);
+        released();
+    }
+};
+
+
+function greaterThan3(input) {
+    return input > 3;
+}
+
+function lessThan3(input) {
+    return input < 3;
+}
+
+function genRandom(random, min, max) {
+    return random * (max - min) + min;
+}
+
+
 
 
 
