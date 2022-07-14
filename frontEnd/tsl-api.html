@@ -8,6 +8,8 @@
     <meta name="generator" content="Hugo 0.88.1">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/tone"></script>
+    <!-- Link dropdownsForAPI.js -->
+    <script src="js/dropdownsForAPI.js"></script>
     <title>dynamicGrammars</title>
     <link href="editor.css" rel="stylesheet">
 </head>
@@ -30,26 +32,42 @@
                 <option value="xstate">xstate</option>
             </optgroup>
             </select>
+            <button type="submit" onclick="loadSpec()">Load Spec</button>
+            <select id="targetSpec" aria-label="Demo Specs">
+                <optgroup label="Demo Specs">
+                <option value="N/A">N/A</option>
+                <option value="Demo1">Demo 1</option>
+                <option value="Demo2">Demo 2</option>
+                <option value="Demo3">Demo 3</option>
+            </optgroup>
+            </select>
             <button id="play-button" style="background-color:lightskyblue">Play Music!</button>
-            <input type="button" name="Button Toggle" value="Button Off" id="select" onclick="colorchange('select')" class="btnPRESSED" />
-                    <script>
-                        function colorchange(id)
-                    {
-                    var el = document.getElementById(id);
-                    var currentClass = el.getAttribute("class");
-                    if(currentClass == 'btnPRESSED')
-                    {
-                        el.setAttribute("class", "btnOFF");
-                        el.value = "Button On";
-                        pressed();
-                    } else {
-                        el.setAttribute("class", "btnPRESSED");
-                        el.value = "Button Off";
-                        released();
-                    }
-                    }
-                    </script>
+            <button id="button-press" style="background-color:red">Button Press</button>
+            <script>
+                document.getElementById("button-press").onmousedown = function() {
+                    this.style.backgroundColor = "lightgreen";
+                    pressed();
+                };
+                document.getElementById("button-press").onmouseup = function() {
+                    this.style.backgroundColor = "red";
+                    released();
+                };
+            </script>
+            <!--<input type="button" name="Reverse Toggle" value="Reverse Off" id="reverseToggle" onmousedown="colorchange()" class="btnPRESSED" />-->
+            <!--<button id="random-button" style="background-color:orange" onclick=randomNumber()>Random Effect</button>-->
+             <div class="range"></div>
+                <label for="vol">Current Loop Speed: <div id="sliderAmount">6</div></label>
+                <input id ="slide" type="range" min="2" max="8" step = "2" class="slider" onchange="updateSlider(this.value)">
+                <div class="sliderticks">
+                  <p>2</p>
+                  <p>4</p>
+                  <p>6</p>
+                  <p>8</p>
+                </div>
+              </div>
+            
         </main>
+       
     </div>
     <div class="row" style="padding: 10px;margin-left: -23px;">
     <div id="tslEditor" class="column SE">
@@ -90,8 +108,8 @@
         <textarea id="codeBox" rows="10" spellcheck="false" style="width:100%;height:300px;padding:10px"></textarea>
     </div>
     </div>
+    
     <div class="row">
-
               <h2 id="audio">Audio Samples:</h2>
                 <div class="column">
                 <p>
