@@ -3,6 +3,34 @@ let noteToPlay = ""
 let audioSample = ""
 let rhythm = "8n"
 var buttonPress = false
+const toneRow = ["E4", "G4", "D4"] // might cause problems because i dont know if D4 can be played yet
+
+//transpose
+function transpose(num) {
+    var transposed = [];
+    for (var i = 0; i < toneRow.length; i++) {
+        transposed.push((toneRow[i] + num) % 3);
+        /*
+        used to be % 12 (to accomodate for 12 tones) but we are testing a 3-tone row.
+        same applies for inversion()
+        */
+    }
+    return transposed;
+}
+
+//inversion
+function inversion() {
+    var inverted = [];
+    for (var i = 0; i < toneRow.length; i++) {
+        inverted.push((3 - toneRow[i]) % 3);
+    }
+    return inverted;
+}
+
+//retrograde
+function retrograde() {
+    return toneRow.reverse(); 
+}
 
 function callSynth(id) {
     //reset updateStateMachine() after every synthesis
