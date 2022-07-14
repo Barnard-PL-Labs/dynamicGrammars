@@ -32,6 +32,15 @@
                 <option value="xstate">xstate</option>
             </optgroup>
             </select>
+            <button type="submit" onclick="loadSpec()">Load Spec</button>
+            <select id="targetSpec" aria-label="Demo Specs">
+                <optgroup label="Demo Specs">
+                <option value="N/A">N/A</option>
+                <option value="Demo1">Demo 1</option>
+                <option value="Demo2">Demo 2</option>
+                <option value="Demo3">Demo 3</option>
+            </optgroup>
+            </select>
             <button id="play-button" style="background-color:lightskyblue">Play Music!</button>
             <button id="button-press" style="background-color:red">Button Press</button>
             <script>
@@ -46,7 +55,7 @@
             </script>
             <!--<input type="button" name="Reverse Toggle" value="Reverse Off" id="reverseToggle" onmousedown="colorchange()" class="btnPRESSED" />-->
             <!--<button id="random-button" style="background-color:orange" onclick=randomNumber()>Random Effect</button>-->
-             <!--<div class="range"></div>
+             <div class="range"></div>
                 <label for="vol">Current Loop Speed: <div id="sliderAmount">6</div></label>
                 <input id ="slide" type="range" min="2" max="8" step = "2" class="slider" onchange="updateSlider(this.value)">
                 <div class="sliderticks">
@@ -54,7 +63,7 @@
                   <p>4</p>
                   <p>6</p>
                   <p>8</p>
-                </div>-->
+                </div>
               </div>
             
         </main>

@@ -1,12 +1,15 @@
-var currentState = 0
-let noteToPlay = ""
-let rhythm = "8n"
-let effect = ""
+var currentState = 0;
+let noteToPlay = "";
+let rhythm = "8n";
+let effect = "";
 let rand = 0;
-let tempoSpeed = "Times4"
-var buttonPress = false
-
-
+let tempoSpeed = "Times4";
+var buttonPress = false;
+let dem1 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20E4%5D)%3B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D)%3B%20%7D&target=js"
+let dem2 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%3B%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20E4%5D%20%26%26%20%5Beffect%20%3C-%20Wah%5D)%3B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D)%3B%20%7D&target=js"
+let dem3 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%3B%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times8%5D)%3B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times4%5D)%3B%20%7D&target=js"
+let demSpec = "";
+var demoOn = false;
 const callSynth = id => {
     //reset updateStateMachine() after every synthesis
     let prevSynthesized = document.getElementById("synth_script");
@@ -51,16 +54,40 @@ const callSynth = id => {
                 script.text = temp;
                 script.setAttribute("id", "synth_script");
                 document.body.appendChild(script);
+                console.log(script);
             });
         })
         .catch(error => console.error(error));
 };
 
+let dem1Assume = "always assume {\n   !(greaterThan3(rand) && lessThan3(rand))\n}";
+let dem1Guarantee = "always guarantee {\n   F(greaterThan3(rand) -> [noteToPlay <- E4])\n   F(lessThan3(rand) -> [noteToPlay <- G4])\n}";
+let dem2Guarantee = "always guarantee {\n   F(lessThan3(rand) -> [noteToPlay <- E4] && [effect <- Wah])\n   F(greaterThan3(rand) -> [noteToPlay <- G4])\n}";
+let dem3Guarantee = "always guarantee {\n   F(greaterThan3(rand) -> [noteToPlay <- G4] && [tempoSpeed <- Times8])\n   F(lessThan3(rand) -> [noteToPlay <- G4] && [tempoSpeed <- Times4])\n}";
+ 
+
 // switch to the text editor
 // update the text editor content when changed from structured editor to text editor
 const toTE = () => {
-    document.getElementById('specBox').innerHTML = delDel(extractContent(document.getElementById("assume").innerText,
+    if(document.getElementById("targetSpec").value == "Demo1")
+    {
+        document.getElementById('specBox').innerHTML = delDel(extractContent(dem1Assume,
+        dem1Guarantee));
+    }
+    else if (document.getElementById("targetSpec").value == "Demo2")
+    {
+        document.getElementById('specBox').innerHTML = delDel(extractContent(dem1Assume,
+            dem2Guarantee));
+    }
+    else if (document.getElementById("targetSpec").value == "Demo3")
+    {
+        document.getElementById('specBox').innerHTML = delDel(extractContent(dem1Assume,
+            dem3Guarantee));
+    }
+    else {
+        document.getElementById('specBox').innerHTML = delDel(extractContent(document.getElementById("assume").innerText,
         document.getElementById("guarantee").innerText));
+    }
     document.getElementsByClassName('SE')[0].
         style.display = 'none';
     document.getElementsByClassName('TE')[0].
@@ -158,7 +185,6 @@ playButton.addEventListener("click", function() {
                 }
             }
             else{
-                console.log("Note Played Fail: " + noteToPlay);
                 loopSpeed = tempoSpeed.substring(tempoSpeed.length - 1) + "n";
                 loopA.interval = loopSpeed;
                 loopA.start(0);
@@ -212,6 +238,58 @@ function lessThan3(input) {
 
 function genRandom(random, min, max) {
     return random * (max - min) + min;
+}
+
+function loadSpec()
+{
+    demoOn = true;
+    targetSpec = document.getElementById("targetSpec").value;
+     //reset updateStateMachine() after every synthesis
+     let prevSynthesized = document.getElementById("synth_script");
+     if(prevSynthesized) {
+         prevSynthesized.remove();
+     }
+     reset();
+    if (targetSpec == "Demo1")
+    {
+    demSpec = dem1;
+    }
+    else if (targetSpec == "Demo2")
+    {
+        demSpec = dem2;
+    }
+    else
+    {
+        demSpec = dem3;
+    }
+     fetch(demSpec)
+         .then(response => {
+            response.text().then(function(text) {
+                document.getElementById("codeBox").value = text;
+                //append generated script code to client side
+                let script = document.createElement("script");
+                let temp = "function updateStateMachine(){\n" + text + "}"
+                //gotta change this at some point!
+                temp = temp.replaceAll("G4", "\"G4\"")
+                temp = temp.replaceAll("E4", "\"E4\"")
+                temp = temp.replaceAll("Times2", "\"Times2\"")
+                temp = temp.replaceAll("Times4", "\"Times4\"")
+                temp = temp.replaceAll("Times8", "\"Times8\"")
+                temp = temp.replaceAll("None", "\"None\"")
+                temp = temp.replaceAll("Wah", "\"Wah\"")
+                temp = temp.replaceAll("Reverb", "\"Reverb\"")
+                temp = temp.replaceAll("hihat", "\"hihat\"")
+                temp = temp.replaceAll("snare", "\"snare\"")
+                temp = temp.replaceAll("eigthnote", "\"8n\"")
+                temp = temp.replaceAll("halfnote", "\"2n\"")
+                temp = temp.replaceAll("quarternote", "\"4n\"")
+                script.text = temp;
+                script.setAttribute("id", "synth_script");
+                document.body.appendChild(script);
+                console.log(script);
+            });
+         })
+         .catch(error => console.error(error));
 }
 
 
