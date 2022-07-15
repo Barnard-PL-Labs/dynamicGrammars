@@ -93,10 +93,10 @@ const callSynth = id => {
         .catch(error => console.error(error));
 };
 
-let dem1Assume = "always assume {\n   !(greaterThan3(rand) && lessThan3(rand))\n}";
-let dem1Guarantee = "always guarantee {\n   F(greaterThan3(rand) -> [noteToPlay <- E4])\n   F(lessThan3(rand) -> [noteToPlay <- G4])\n}";
-let dem2Guarantee = "always guarantee {\n   F(lessThan3(rand) -> [noteToPlay <- E4] && [effect <- Wah])\n   F(greaterThan3(rand) -> [noteToPlay <- G4])\n}";
-let dem3Guarantee = "always guarantee {\n   F(greaterThan3(rand) -> [noteToPlay <- G4] && [tempoSpeed <- Times8])\n   F(lessThan3(rand) -> [noteToPlay <- G4] && [tempoSpeed <- Times4])\n}";
+let dem1Assume = "always assume {\n   !(greaterThan3(rand) && lessThan3(rand));\n}";
+let dem1Guarantee = "always guarantee {\n   F(greaterThan3(rand) -> [noteToPlay <- E4]);\n   F(lessThan3(rand) -> [noteToPlay <- G4]);\n}";
+let dem2Guarantee = "always guarantee {\n   F(lessThan3(rand) -> [noteToPlay <- E4] && [effect <- Wah]);\n   F(greaterThan3(rand) -> [noteToPlay <- G4]);\n}";
+let dem3Guarantee = "always guarantee {\n   F(greaterThan3(rand) -> [noteToPlay <- G4] && [tempoSpeed <- Times8]);\n   F(lessThan3(rand) -> [noteToPlay <- G4] && [tempoSpeed <- Times4]);\n}";
  
 
 // switch to the text editor
@@ -275,6 +275,7 @@ function genRandom(random, min, max) {
 
 function loadSpec()
 {
+    toTE();
     demoOn = true;
     targetSpec = document.getElementById("targetSpec").value;
      //reset updateStateMachine() after every synthesis
