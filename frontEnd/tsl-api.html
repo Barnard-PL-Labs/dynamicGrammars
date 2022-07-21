@@ -26,7 +26,7 @@
         <main>
             <button type="submit" onclick="callSynth(editorNum)">Run Synthesis</button>
             <select id="targetLang" aria-label="target language">
-                <optgroup label="Target Language">
+            <optgroup label="Target Language">
                 <option value="js">javascript</option>
                 <option value="python">python</option>
                 <option value="xstate">xstate</option>
@@ -34,15 +34,26 @@
             </select>
             <button type="submit" onclick="loadSpec()">Load Spec</button>
             <select id="targetSpec" aria-label="Demo Specs">
-                <optgroup label="Demo Specs">
+            <optgroup label="Demo Specs">
                 <option value="N/A">N/A</option>
                 <option value="Demo1">Demo 1</option>
                 <option value="Demo2">Demo 2</option>
                 <option value="Demo3">Demo 3</option>
             </optgroup>
+            <button type="button" onclick="transpose(num)">Transpose</button>
+            <button type="button" onclick="inversion()">Inversion</button>
+            <button type="button" onclick="retrograde()">Retrograde</button>
             </select>
+
             <button id="play-button" style="background-color:lightskyblue">Play Music!</button>
             <button id="button-press" style="background-color:red">Button Press</button>
+
+            <!--
+                <button id="transpose" style="background-color:lightgreen">Transpose</button>
+                <button id="inversion" style="background-color:pink">Inversion</button>
+                <button id="retrograde" style="background-color:rgb(120, 131, 208)">Retrograde</button>
+            -->
+
             <script>
                 document.getElementById("button-press").onmousedown = function() {
                     this.style.backgroundColor = "lightgreen";
