@@ -1,6 +1,6 @@
 
 var currentState = 0;
-let noteToPlay = "";
+let noteToPlay = "E4";
 let rhythm = "8n";
 let effect = "";
 let rand = 0;
@@ -11,7 +11,7 @@ let dem2 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20a
 let dem3 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%3B%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times8%5D)%3B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times4%5D)%3B%20%7D&target=js"
 let demSpec = "";
 var demoOn = false;
-const toneRow = ["E4", "G4", "D4"] // might cause problems because i dont know if D4 can be played yet
+let toneRow = ["E4", "G4", "D4"] // might cause problems because i dont know if D4 can be played yet
 
 //transpose
 function transpose(num) {
@@ -155,7 +155,7 @@ const extractContent = (assumeBody, guaranteeBody) => {
 
 const reset = () => {
     currentState = 0
-    noteToPlay = ""
+    noteToPlay = "E4"
     effect = ""
     tempoSpeed = "Times4"
     rhythm = "8n"
