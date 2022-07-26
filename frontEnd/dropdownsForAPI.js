@@ -11,6 +11,10 @@ let dem2 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20a
 let dem3 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%3B%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times8%5D)%3B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times4%5D)%3B%20%7D&target=js"
 let demSpec = "";
 var demoOn = false;
+var slideAmount;
+var sliderDiv = document.getElementById("sliderAmount");
+slideAmount = sliderDiv.innerHTML;
+// slideAmount is the integer value of sliderDiv 
 const toneRow = ["E4", "G4", "D4"] // might cause problems because i dont know if D4 can be played yet
 
 //transpose
@@ -97,7 +101,7 @@ let dem1Assume = "always assume {\n   !(greaterThan3(rand) && lessThan3(rand));\
 let dem1Guarantee = "always guarantee {\n   F(greaterThan3(rand) -> [noteToPlay <- E4]);\n   F(lessThan3(rand) -> [noteToPlay <- G4]);\n}";
 let dem2Guarantee = "always guarantee {\n   F(lessThan3(rand) -> [noteToPlay <- E4] && [effect <- Wah]);\n   F(greaterThan3(rand) -> [noteToPlay <- G4]);\n}";
 let dem3Guarantee = "always guarantee {\n   F(greaterThan3(rand) -> [noteToPlay <- G4] && [tempoSpeed <- Times8]);\n   F(lessThan3(rand) -> [noteToPlay <- G4] && [tempoSpeed <- Times4]);\n}";
- 
+
 
 // switch to the text editor
 // update the text editor content when changed from structured editor to text editor
@@ -188,7 +192,7 @@ playButton.addEventListener("click", function() {
     if (first) {
         playButton.innerText = "Pause Music!"
         const synthA = new Tone.Synth().toDestination();
-        var sliderDiv = document.getElementById("sliderAmount");
+        sliderDiv = document.getElementById("sliderAmount");
         // loopSpeed is the last digit of "tempoSpeed" + "n"
         console.log("Tempo Speed: " + tempoSpeed);
         var loopSpeed = tempoSpeed.substring(tempoSpeed.length - 1) + "n";
@@ -196,6 +200,9 @@ playButton.addEventListener("click", function() {
         console.log("Loop speed original: " + loopSpeed);
         const loopA = new Tone.Loop(time => {
             rand = genRandom(Math.random(), 1, 5);
+            sliderDiv = document.getElementById("sliderAmount");
+            slideAmount = sliderDiv.innerHTML;
+            console.log("Slide amount is: " + slideAmount);
             console.log("Random Generated is: " + rand);
             updateStateMachine();
             // loopSpeed is the last digit of "tempoSpeed" + "n"
@@ -239,10 +246,9 @@ playButton.addEventListener("click", function() {
 });
 
 
-const updateSlider = slideAmount => {
-    var sliderDiv = document.getElementById("sliderAmount");
+function updateSlider(slideAmount) {
     sliderDiv.innerHTML = slideAmount;
-};
+}
 
 const colorchange = () => {
     var currentClass = rev.getAttribute("class");
@@ -268,6 +274,31 @@ function greaterThan3(input) {
 function lessThan3(input) {
     return input < 3;
 }
+
+function sliderLessEQ4(slideAmount) {
+    return slideAmount <= 4;
+}
+
+function sliderGreater4(slideAmount) {
+    return slideAmount > 4;
+}
+
+function sliderLessEQ2(slideAmount) {
+    return slideAmount <= 2;
+}
+
+function sliderGreater2(slideAmount) {
+    return slideAmount > 2;
+}
+
+function sliderLessEQ6(slideAmount) {
+    return slideAmount <= 6;
+}
+
+function sliderGreater6(slideAmount) {
+    return slideAmount > 6;
+}
+
 
 function genRandom(random, min, max) {
     return random * (max - min) + min;
