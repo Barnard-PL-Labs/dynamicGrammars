@@ -1,21 +1,43 @@
+var 
+    currentState = 0,
+    editorNum = 0,
+    buttonPress = false,
+    first = true,
+    demoOn = false,
+    sliderDiv = document.getElementById("sliderAmount"),
+    slideAmount = sliderDiv.innerHTML,
+    rev = document.getElementById('reverseToggle'),
+    playButton = document.getElementById("play-button")
+;
 
-var currentState = 0;
-let noteToPlay = "";
-let rhythm = "8n";
-let effect = "";
-let rand = 0;
-let tempoSpeed = "Times4";
-var buttonPress = false;
-let dem1 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20E4%5D)%3B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D)%3B%20%7D&target=js"
-let dem2 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%3B%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20E4%5D%20%26%26%20%5Beffect%20%3C-%20Wah%5D)%3B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D)%3B%20%7D&target=js"
-let dem3 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%3B%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times8%5D)%3B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times4%5D)%3B%20%7D&target=js"
-let demSpec = "";
-var demoOn = false;
-var slideAmount;
-var sliderDiv = document.getElementById("sliderAmount");
+let
+    noteToPlay = "",
+    rhythm = "8n",
+    effect = "",
+    rand = 0,
+    tempoSpeed = "Times4",
+    dem1 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20E4%5D)%3B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D)%3B%20%7D&target=js",
+    dem2 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%3B%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20E4%5D%20%26%26%20%5Beffect%20%3C-%20Wah%5D)%3B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D)%3B%20%7D&target=js",
+    dem3 = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl=always%20assume%20%7B%20%20%20%20!%20(greaterThan3(rand)%20%20%26%26%20lessThan3(rand))%3B%20%7D%20%20always%20guarantee%20%7B%20%20%20%20%20F%20(greaterThan3(rand)%20-%3E%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times8%5D)%3B%20%20%20%20%20F%20(lessThan3(rand)%20-%3E%20%20%5BnoteToPlay%20%3C-%20G4%5D%20%26%26%20%5BtempoSpeed%20%3C-%20Times4%5D)%3B%20%7D&target=js",
+    demSpec = ""
+;
+
 slideAmount = sliderDiv.innerHTML;
 // slideAmount is the integer value of sliderDiv 
 const toneRow = ["E4", "G4", "D4"] // might cause problems because i dont know if D4 can be played yet
+
+document.getElementById("button-press").onmousedown = function() {
+    this.style.backgroundColor = "lightgreen";
+    pressed();
+};
+document.getElementById("button-press").onmouseup = function() {
+    this.style.backgroundColor = "red";
+    released();
+};
+ 
+const pressed = () => {buttonPress = true;};
+
+const released = () => {buttonPress = false;};
 
 //transpose
 function transpose(num) {
@@ -44,9 +66,6 @@ function retrograde() {
     return toneRow.reverse(); 
 }
 
-// function callSynth(id) {
-
-
 const callSynth = id => {
     //reset updateStateMachine() after every synthesis
     let prevSynthesized = document.getElementById("synth_script");
@@ -74,20 +93,10 @@ const callSynth = id => {
                 //append generated script code to client side
                 let script = document.createElement("script");
                 let temp = "function updateStateMachine(){\n" + text + "}"
-                //gotta change this at some point!
-                temp = temp.replaceAll("G4", "\"G4\"")
-                temp = temp.replaceAll("E4", "\"E4\"")
-                temp = temp.replaceAll("Times2", "\"Times2\"")
-                temp = temp.replaceAll("Times4", "\"Times4\"")
-                temp = temp.replaceAll("Times8", "\"Times8\"")
-                temp = temp.replaceAll("None", "\"None\"")
-                temp = temp.replaceAll("Wah", "\"Wah\"")
-                temp = temp.replaceAll("Reverb", "\"Reverb\"")
-                temp = temp.replaceAll("hihat", "\"hihat\"")
-                temp = temp.replaceAll("snare", "\"snare\"")
-                temp = temp.replaceAll("eigthnote", "\"8n\"")
-                temp = temp.replaceAll("halfnote", "\"2n\"")
-                temp = temp.replaceAll("quarternote", "\"4n\"")
+                let toneFX = ["G4", "E4", "Times2", "Times4", "Times8", "None", "Wah", "Reverb", "hihat", "snare", "eigthnote", "halfnote", "quarternote"];
+                for (var i = 0; i < toneFX.length; i++) {
+                    temp = temp.replaceAll(toneFX[i], "\""+toneFX[i]+"\"")
+                }
                 script.text = temp;
                 script.setAttribute("id", "synth_script");
                 document.body.appendChild(script);
@@ -166,28 +175,23 @@ const reset = () => {
     buttonPress = false
 };
 
-const pressed = () => {buttonPress = true;};
 
-// Button toggles false if user clicks on it again
-const released = () => {buttonPress = false;};
+const 
+    snare = new Tone.Player("./vocal_cymantics/" + "snare" + ".wav").toDestination(),
+    hihat = new Tone.Player("./vocal_cymantics/" + "hihat" + ".wav").toDestination(),
+    reverb = new Tone.JCReverb(0.3).toDestination(),
+    delay = new Tone.FeedbackDelay(0+0.2).toDestination(),
+    autoWah = new Tone.AutoWah(50, 6, -30).toDestination(),
+    synthWah = new Tone.Synth().connect(autoWah),
+    synth = new Tone.DuoSynth().chain(delay, reverb)
+;
 
-const snare = new Tone.Player("./vocal_cymantics/" + "snare" + ".wav").toDestination();
 snare.loop = false;
-const hihat = new Tone.Player("./vocal_cymantics/" + "hihat" + ".wav").toDestination();
 hihat.loop = false;
 samplePlayers = {"snare": snare, "hihat": hihat};
-
-const reverb = new Tone.JCReverb(0.3).toDestination();
-const delay = new Tone.FeedbackDelay(0+0.2).toDestination();
-const synth = new Tone.DuoSynth().chain(delay, reverb);
-
-const autoWah = new Tone.AutoWah(50, 6, -30).toDestination();
-const synthWah = new Tone.Synth().connect(autoWah);
 autoWah.Q.value = (1.1);
-//template
-var first = true;
-let playButton = document.getElementById("play-button")
-var rev = document.getElementById('reverseToggle');
+
+
 playButton.addEventListener("click", function() {
     if (first) {
         playButton.innerText = "Pause Music!"
@@ -335,19 +339,10 @@ function loadSpec()
                 let script = document.createElement("script");
                 let temp = "function updateStateMachine(){\n" + text + "}"
                 //gotta change this at some point!
-                temp = temp.replaceAll("G4", "\"G4\"")
-                temp = temp.replaceAll("E4", "\"E4\"")
-                temp = temp.replaceAll("Times2", "\"Times2\"")
-                temp = temp.replaceAll("Times4", "\"Times4\"")
-                temp = temp.replaceAll("Times8", "\"Times8\"")
-                temp = temp.replaceAll("None", "\"None\"")
-                temp = temp.replaceAll("Wah", "\"Wah\"")
-                temp = temp.replaceAll("Reverb", "\"Reverb\"")
-                temp = temp.replaceAll("hihat", "\"hihat\"")
-                temp = temp.replaceAll("snare", "\"snare\"")
-                temp = temp.replaceAll("eigthnote", "\"8n\"")
-                temp = temp.replaceAll("halfnote", "\"2n\"")
-                temp = temp.replaceAll("quarternote", "\"4n\"")
+                let toneFX = ["G4", "E4", "Times2", "Times4", "Times8", "None", "Wah", "Reverb", "hihat", "snare", "eigthnote", "halfnote", "quarternote"];
+                for (var i = 0; i < toneFX.length; i++) {
+                    temp = temp.replaceAll(toneFX[i], "\""+toneFX[i]+"\"")
+                }
                 script.text = temp;
                 script.setAttribute("id", "synth_script");
                 document.body.appendChild(script);
