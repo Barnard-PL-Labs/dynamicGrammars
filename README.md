@@ -9,7 +9,8 @@ Whereas structured editors tend to be too restrictive and cumbersome in general 
 
 ## Try a live demo
 
-<p><a href="frontEnd/dynamicGrammars.html">Structured editor for TSL</a></p>
+<p><a href="https://barnard-pl-labs.github.io/dynamicGrammars/frontEnd/oldDG.html">Structured editor for TSL</a></p>
+<p><a href="frontEnd/dynamicGrammars.html">Structured editor for TSL with more music richness</a></p>
 
 ## install
 
